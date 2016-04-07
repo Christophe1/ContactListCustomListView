@@ -24,29 +24,129 @@ package com.example.chris.contactlistcustomlistview;
 public class MainActivity extends Activity {
 
     // ArrayList
-    ArrayList<SelectUser> selectUsers;
-    List<SelectUser> temp;
+    ArrayList<SelectContact> selectContacts;
+//    List<SelectContact> temp;
     // Contact List
     ListView listView;
 
-    // Cursor to load contacts list
-    Cursor phones, email;
 
+    // Cursor to load contacts list
+    Cursor phones;
+    Cursor phonestwo;
+//Cursor curt;
     // Pop up
     ContentResolver resolver;
     SearchView search;
-    SelectUserAdapter adapter;
+    SelectContactAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        selectUsers = new ArrayList<SelectUser>();
+        selectContacts = new ArrayList<SelectContact>();
         resolver = this.getContentResolver();
         listView = (ListView) findViewById(R.id.contacts_list);
 
-        phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
+        //************************************************
+//        String[] selectionArgs = new String[] { Contacts.DISPLAY_NAME };
+
+//        int counter = selectionArgs.length();
+//        Cursor cursortest = getContentResolver().query (ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
+//        Log.e("count contacts", "" + cursortest.getCount());
+//        Log.e("count", "" + selectionArgs.length());
+
+//        String[] selectionArgs = { ContactsContract.Contacts.LOOKUP_KEY };
+//
+//        Cursor cursortest = getContentResolver().query (ContactsContract.Contacts.CONTENT_FILTER_URI,
+//                selectionArgs,
+//                null,
+//                null,
+//                null);
+
+//
+//        String selection = ContactsContract.Contacts.IN_VISIBLE_GROUP + " = '"
+//                + ("1") + "'";
+//        String sortOrder = ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
+
+//        curt = getContentResolver().query(
+//                ContactsContract.Contacts.CONTENT_URI,
+//                null,
+//                selection + " AND " + ContactsContract.Contacts.HAS_PHONE_NUMBER + "=1",
+//                null,
+//                sortOrder);// this query only return contacts which had phone number and not duplicated
+//
+//        Log.e("CntactsCntract.bahhh", "" + curt.getCount());
+//        Log.e("count", "" + selectionArgs.length());
+
+//        ***********************
+// this query only return contacts with phone number and is not duplicated
+        phones = getContentResolver().query(
+//                the table to query
+                ContactsContract.Contacts.CONTENT_URI,
+//                the columns to return
+                null,
+//               selection criteria :
+// we only want contacts that have a name and a phone number. If they have a phone number, the value is 1 (if not, it is 0)
+                ContactsContract.Contacts.IN_VISIBLE_GROUP + " = '" + ("1") + "'" + " AND " + ContactsContract.Contacts.HAS_PHONE_NUMBER + "=1",
+//               selection criteria
+                null,
+//                display in ascending order
+                ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
+
+
+//        phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+//                null,
+//                null,
+//                null,
+//                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
+
+//        Cursor thephonenumber = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null,ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = "+ id,null, null);
+
+
+        Log.e("phones", "" + phones.getCount());
+
+
+//**********************8
+//        if (phones.getCount() > 0) {
+
+//            while (phones.moveToNext()) {
+//                String id = phones.getString(phones.getColumnIndex(ContactsContract.Contacts._ID));
+//                String name = phones.getString(phones.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+//                Log.i("Names", name);
+//                if (Integer.parseInt(phones.getString(phones.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0)
+//                {
+                    // Query phone here. Covered next
+        String[] projection    = new String[] {ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME};
+//        ,
+//                ContactsContract.CommonDataKinds.Phone.NUMBER};
+
+                     phonestwo = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                             null,
+                             ContactsContract.CommonDataKinds.Phone.IN_VISIBLE_GROUP + " = '" + ("1") + "'" + " AND " + ContactsContract.CommonDataKinds.Phone.HAS_PHONE_NUMBER + "=1",
+//                             ContactsContract.CommonDataKinds.Phone.NUMBER,
+                             null,
+                             null);
+//                    phonestwo.moveToFirst();
+        Log.e("phonestwo", "" + phonestwo.getCount());
+//                        while (phonestwo.moveToNext()) {
+//                        String phoneNumber = phonestwo.getString(phonestwo.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+//                        String theName = phones.getString(phones.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC"));
+//
+//                        Log.i("Name and Number", theName + "and" + phoneNumber);
+//                    }
+
+
+
+
+//            phones.close();
+
+
+
+
+
+
+
 //        retrieves contact information
         LoadContact loadContact = new LoadContact();
         loadContact.execute();
@@ -87,40 +187,54 @@ public class MainActivity extends Activity {
 
 
             if (phones != null) {
-                Log.e("count", "" + phones.getCount());
+                Log.e("ContactsContract count", "" + phones.getCount());
                 if (phones.getCount() == 0) {
                     Toast.makeText(MainActivity.this, "No contacts in your contact list.", Toast.LENGTH_LONG).show();
                 }
 
+
+
                 while (phones.moveToNext()) {
-                    Bitmap bit_thumb = null;
-                    String id = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
-                    String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-                    String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                    String EmailAddr = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA2));
-                    String image_thumb = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI));
-                    try {
-                        if (image_thumb != null) {
-                            bit_thumb = MediaStore.Images.Media.getBitmap(resolver, Uri.parse(image_thumb));
-                        } else {
-                            Log.e("No Image Thumb", "--------------");
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+////                    Bitmap bit_thumb = null;
+////                    String nametwo = phones.getString(phones.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+////                    String id = phones.get
+//// String(phones.getColumnIndex(ContactsContract.Contacts.CONTACT_ID));
+                    String name = phones.getString(phones.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+////                    String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+//
+//                    {
+//                        // Query phone here. Covered next
+//                        while (thephonenumber.moveToNext()) {
+//                            String aphoneNumber = thephonenumber.getString(thephonenumber.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+//                            Log.i("Number", aphoneNumber);
+//                        }
+
+
+//                    String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.Contacts.CONTACT_STATUS));
+//                    String EmailAddr = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA2));
+//                    String image_thumb = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI));
+//                    try {
+//                        if (image_thumb != null) {
+//                            bit_thumb = MediaStore.Images.Media.getBitmap(resolver, Uri.parse(image_thumb));
+//                        } else {
+//                            Log.e("No Image Thumb", "--------------");
+//                        }
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
 //what's happening here? For every user in the phonebook, show an image, the name, number, an id and maybe a checkbox?
-                    SelectUser selectUser = new SelectUser();
-                    selectUser.setThumb(bit_thumb);
-                    selectUser.setName(name);
-                    selectUser.setPhone(phoneNumber);
-                    selectUser.setEmail(id);
-                    selectUser.setCheckedBox(false);
-                    selectUsers.add(selectUser);
+                    SelectContact selectContact = new SelectContact();
+//                    selectContact.setThumb(bit_thumb);
+//                    selectContact.setName(nametwo);
+                    selectContact.setName(name);
+//                    selectContact.setPhone(phoneNumber);
+//                    selectContact.setEmail(id);
+//                    selectContact.setCheckedBox(false);
+                    selectContacts.add(selectContact);
                 }
-            } else {
                 Log.e("Cursor close 1", "----------------");
             }
-            //phones.close();
+            phones.close();
             return null;
         }
 
@@ -128,7 +242,7 @@ public class MainActivity extends Activity {
 //        when DoInBackground is finished, when we have our phone number, name etc... display the results in our listview.
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-            adapter = new SelectUserAdapter(selectUsers, MainActivity.this);
+            adapter = new SelectContactAdapter(selectContacts, MainActivity.this);
             listView.setAdapter(adapter);
 
             // Select item on listclick
@@ -138,17 +252,20 @@ public class MainActivity extends Activity {
 
                     Log.e("search", "here---------------- listener");
 
-                    SelectUser data = selectUsers.get(i);
+                    SelectContact data = selectContacts.get(i);
                 }
             });
 
             listView.setFastScrollEnabled(true);
         }
-    }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        phones.close();
-    }
-}
+
+//    @Override
+//    protected void onStop() {
+//        super.onStop();
+//        phones.close();
+//    }
+}}
+
+
+//*****************************

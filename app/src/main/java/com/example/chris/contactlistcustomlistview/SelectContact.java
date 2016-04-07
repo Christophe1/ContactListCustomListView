@@ -5,7 +5,7 @@ package com.example.chris.contactlistcustomlistview;
  */
 import android.graphics.Bitmap;
 
-public class SelectUser {
+public class SelectContact {
     String name;
 
     public Bitmap getThumb() {

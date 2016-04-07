@@ -2,8 +2,6 @@ package com.example.chris.contactlistcustomlistview;
 
         import android.annotation.TargetApi;
         import android.content.Context;
-        import android.graphics.Bitmap;
-        import android.graphics.BitmapFactory;
         import android.os.Build;
         import android.util.Log;
         import android.view.LayoutInflater;
@@ -11,11 +9,10 @@ package com.example.chris.contactlistcustomlistview;
         import android.view.ViewGroup;
         import android.widget.BaseAdapter;
         import android.widget.CheckBox;
-        import android.widget.ImageView;
         import android.widget.TextView;
 
 //        import com.trinitygetcontact.R;
-//        import com.trinitygetcontact.getset.SelectUser;
+//        import com.trinitygetcontact.getset.SelectContact;
 //        import com.trinitygetcontact.utils.RoundImage;
 
         import java.util.ArrayList;
@@ -26,18 +23,18 @@ package com.example.chris.contactlistcustomlistview;
  * Created by Chris on 25/03/2016.
  */
 
-public class SelectUserAdapter extends BaseAdapter {
+public class SelectContactAdapter extends BaseAdapter {
 
-    public List<SelectUser> _data;
-    private ArrayList<SelectUser> arraylist;
+    public List<SelectContact> _data;
+    private ArrayList<SelectContact> arraylist;
     Context _c;
     ViewHolder v;
 //    RoundImage roundedImage;
 
-    public SelectUserAdapter(List<SelectUser> selectUsers, Context context) {
-        _data = selectUsers;
+    public SelectContactAdapter(List<SelectContact> selectContacts, Context context) {
+        _data = selectContacts;
         _c = context;
-        this.arraylist = new ArrayList<SelectUser>();
+        this.arraylist = new ArrayList<SelectContact>();
         this.arraylist.addAll(_data);
     }
 
@@ -84,7 +81,7 @@ public class SelectUserAdapter extends BaseAdapter {
 
 //        for each new cell with title, name, number etc...
 //
-        final SelectUser data = (SelectUser) _data.get(i);
+        final SelectContact data = (SelectContact) _data.get(i);
         v.title.setText(data.getName());
         v.check.setChecked(data.getCheckedBox());
         v.phone.setText(data.getPhone());
@@ -131,23 +128,48 @@ public class SelectUserAdapter extends BaseAdapter {
         charText = charText.toLowerCase(Locale.getDefault());
 //        _data is our list of Users, or contacts
         _data.clear();
-//        If there is nothing in the searchbox,
+//        If there is nothing in the searchview,
 //        then show all the contacts
         if (charText.length() == 0) {
             _data.addAll(arraylist);
 //            or else....
         } else {
-            for (SelectUser wp : arraylist) {
+            for (SelectContact wp : arraylist) {
 //                If a contact's phone number matches the input thus far that the user
 //                is filtering for, then include it in the listview.
                 if (wp.getPhone().toLowerCase(Locale.getDefault())
                         .contains(charText)) {
+
+
+//                    int flag = 0;
+//
+//                    for(int i=0;i<arraylist.size();i++){
+//
+//                        if(!arraylist.get(i).getPhone().trim().equals(name)){
+//                            flag = 1;
+//
+//                        }else{
+//                            flag =0;
+//                            break;
+//                        }
+//
+//                    }
+//                    if(flag == 1){
+//                        arraylist.add(new SelectContact(name, phoneNumber));
+//                    }
+
+
+
+
+
                     _data.add(wp);
                 }
             }
         }
         notifyDataSetChanged();
     }
+
+
     static class ViewHolder {
 //        In each cell in the listview show a name and phone number
 //        ImageView imageView;
