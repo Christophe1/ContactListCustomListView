@@ -2,7 +2,6 @@ package com.example.chris.contactlistcustomlistview;
 
         import android.app.Activity;
         import android.content.ContentResolver;
-        import android.content.Context;
         import android.database.Cursor;
         import android.graphics.Bitmap;
         import android.net.Uri;
@@ -22,24 +21,24 @@ package com.example.chris.contactlistcustomlistview;
         import java.util.ArrayList;
         import java.util.List;
 
-
 public class MainActivity extends Activity {
 
     // ArrayList
     ArrayList<SelectContact> selectContacts;
-    //    List<SelectContact> temp;
+    List<SelectContact> temp;
     // Contact List
     ListView listView;
-
-
     // Cursor to load contacts list
-    Cursor phones;
-    Cursor phonestwo;
-    //Cursor curt;
+    Cursor phones, email;
+    Cursor pCur;
+
     // Pop up
     ContentResolver resolver;
     SearchView search;
     SelectContactAdapter adapter;
+    String phoneContactId;
+    String name;
+    String phoneNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,38 +49,14 @@ public class MainActivity extends Activity {
         resolver = this.getContentResolver();
         listView = (ListView) findViewById(R.id.contacts_list);
 
-        //************************************************
-//        String[] selectionArgs = new String[] { Contacts.DISPLAY_NAME };
 
-//        int counter = selectionArgs.length();
-//        Cursor cursortest = getContentResolver().query (ContactsContract.Contacts.CONTENT_URI, null, null, null, null);
-//        Log.e("count contacts", "" + cursortest.getCount());
-//        Log.e("count", "" + selectionArgs.length());
+//        this is the original phone cursor, which counts 196 (has duplicates)
+//        from https://trinitytuts.com/get-contact-list-and-show-in-custom-listview-android/
+//        phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
 
-//        String[] selectionArgs = { ContactsContract.Contacts.LOOKUP_KEY };
-//
-//        Cursor cursortest = getContentResolver().query (ContactsContract.Contacts.CONTENT_FILTER_URI,
-//                selectionArgs,
-//                null,
-//                null,
-//                null);
+        if (phones != null) {
+        phones.moveToFirst();}
 
-//
-//        String selection = ContactsContract.Contacts.IN_VISIBLE_GROUP + " = '"
-//                + ("1") + "'";
-//        String sortOrder = ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC";
-
-//        curt = getContentResolver().query(
-//                ContactsContract.Contacts.CONTENT_URI,
-//                null,
-//                selection + " AND " + ContactsContract.Contacts.HAS_PHONE_NUMBER + "=1",
-//                null,
-//                sortOrder);// this query only return contacts which had phone number and not duplicated
-//
-//        Log.e("CntactsCntract.bahhh", "" + curt.getCount());
-//        Log.e("count", "" + selectionArgs.length());
-
-//        ***********************
 // this query only return contacts with phone number and is not duplicated
         phones = getContentResolver().query(
 //                the table to query
@@ -96,171 +71,112 @@ public class MainActivity extends Activity {
 //                display in ascending order
                 ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
 
-
-//        ****************************
-//        String phoneContactId = phones.getString(phones.getColumnIndexOrThrow(BaseColumns._ID));
-//
-//        phonestwo = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-//                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{phoneContactId}, null);
-//
-//        while (phonestwo.moveToNext()) {
-//            int phoneType = phonestwo.getInt(phonestwo.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.TYPE));
-//            String phoneNumber = phonestwo.getString(phonestwo.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
-//        }
-//
-
-//        **********************
-//        phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-//                null,
-//                null,
-//                null,
-//                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
-
-//        Cursor thephonenumber = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,null,ContactsContract.CommonDataKinds.Phone.CONTACT_ID +" = "+ id,null, null);
-
-
-//        Log.e("phones", "" + phones.getCount());
-
-
-//**********************8
-//        if (phones.getCount() > 0) {
-
-//            while (phones.moveToNext()) {
-//                String id = phones.getString(phones.getColumnIndex(ContactsContract.Contacts._ID));
-//                String name = phones.getString(phones.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-//                Log.i("Names", name);
-//                if (Integer.parseInt(phones.getString(phones.getColumnIndex(ContactsContract.Contacts.HAS_PHONE_NUMBER))) > 0)
-//                {
-        // Query phone here. Covered next
-//        String[] projection    = new String[] {ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME};
-//        ,
-//                ContactsContract.CommonDataKinds.Phone.NUMBER};
-
-//        getPhoneNumber(name, this);
-//                     phonestwo = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-//                             null,
-//                             ContactsContract.CommonDataKinds.Phone.IN_VISIBLE_GROUP + " = '" + ("1") + "'" + " AND " + ContactsContract.CommonDataKinds.Phone.HAS_PHONE_NUMBER + "=1",
-//                             null,
-//                             null);
-//                    phonestwo.moveToFirst();
-//        Log.e("phonestwo", "" + phonestwo.getCount());
-//                        while (phonestwo.moveToNext()) {
-//                        String phoneNumber = phonestwo.getString(phonestwo.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-//                        String theName = phones.getString(phones.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC"));
-//
-//                        Log.i("Name and Number", theName + "and" + phoneNumber);
-
-
-
-//            phones.close();
-
-
-    //        retrieves contact information
-    LoadContact loadContact = new LoadContact();
-    loadContact.execute();
-
-//        let's set up our search box,
-    search=(SearchView)
-
-    findViewById(R.id.searchView);
-
-    //*** setOnQueryTextListener ***
-    search.setOnQueryTextListener(new SearchView.OnQueryTextListener()
-
-    {
-
-        @Override
-        public boolean onQueryTextSubmit (String query){
-        // TODO Auto-generated method stub
-
-        return false;
-    }
-
-        @Override
-        public boolean onQueryTextChange (String newText){
-        // when the text in searchView changes, call the filter function
-        adapter.filter(newText);
-        return false;
-    }
-    }
-
-    );
-}
-
-// Load data on background
-class LoadContact extends AsyncTask<Void, Void, Void> {
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-
-    }
-
-    @Override
-    protected Void doInBackground(Void... voids) {
-        // Get Contact list from Phone
-
+        Log.e("phonesblahh", "" + phones.getCount());
 
         if (phones != null) {
+            phones.moveToFirst();}
+        String phoneContactId = phones.getString(phones.getColumnIndexOrThrow(BaseColumns._ID));
 
-//            if (!phones.moveToFirst())
-//                phones.moveToFirst();
-//            if (!phonestwo.moveToFirst())
-//                phonestwo.moveToFirst();
+            if (pCur != null) {
+                pCur.moveToFirst();}
+//        pCur.moveToFirst();
+        pCur = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[] { phoneContactId }, null);
+        Log.e("pCurcount", "" + pCur.getCount());
 
-//                Log.e("ContactsContract count", "" + phones.getCount());
-            if (phones.getCount() == 0) {
-                Toast.makeText(MainActivity.this, "No contacts in your contact list.", Toast.LENGTH_LONG).show();
+
+
+//            Remember to move the cursor to the first row, whenever dealing with cursors
+//            phones.moveToFirst();
+//        String phoneContactId = phones.getString(phones.getColumnIndexOrThrow(BaseColumns._ID));
+//        Log.e("The number of IDs:", phoneContactId);
+
+        LoadContact loadContact = new LoadContact();
+        loadContact.execute();
+
+        search = (SearchView) findViewById(R.id.searchView);
+
+        //*** setOnQueryTextListener ***
+        search.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // TODO Auto-generated method stub
+
+                return false;
             }
 
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                // TODO Auto-generated method stub
+                adapter.filter(newText);
+                return false;
+            }
+        });
+    }
 
-//            if (!phones.moveToFirst())
-//                phones.moveToFirst();
+    // Load data on background
+    class LoadContact extends AsyncTask<Void, Void, Void> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
 
-            while (phones.moveToNext()) {
-////                    Bitmap bit_thumb = null;
-////                    String nametwo = phones.getString(phones.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-////                    String id = phones.get
-//// String(phones.getColumnIndex(ContactsContract.Contacts.CONTACT_ID));
+        }
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+            // Get Contact list from Phone
 
 
-                String name = phones.getString(phones.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
 
-
-                String phoneContactId = phones.getString(phones.getColumnIndexOrThrow(BaseColumns._ID));
-
-////                    String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+            if (phones != null) {
+                if (phones.getCount() == 0) {
+                    Toast.makeText(MainActivity.this, "No contacts in your contact list.", Toast.LENGTH_LONG).show();
+                }
 //
-                phonestwo = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-                        null,
-                        ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?",
-                        new String[]{phoneContactId},
-                        null);
-
-//                Log.d("phonestwo", "" + phonestwo.getCount());
-
-
-                while (phonestwo.moveToNext()) {
-                    int phoneType = phonestwo.getInt(phonestwo.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.TYPE));
-                    String phoneNumber = phonestwo.getString(phonestwo.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
-
 //
-//                int phoneType = phonestwo.getInt(phonestwo.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.TYPE));
-//                String phoneNumber = phonestwo.getString(phonestwo.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                while (phones.moveToNext()) {
 
-
-//                    while (phones.getCount() > 0) {
-//                        Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, ContactsContract.CommonDataKinds.Phone._ID + " = " + id, null, null);
+                    String name = phones.getString(phones.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+//                    String phoneContactId = phones.getString(phones.getColumnIndexOrThrow(BaseColumns._ID));
+                    Log.e("phonescount", "" + phones.getCount());
+                    Log.e("names", "" + name);
+//                    Log.e("The number of ID:", phoneContactId);
+                }
+            }
+//                    Cursor pCur = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+//                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[] { phoneContactId }, null);
 //
-//                        Cursor numberwanted
-//                    {
-//                        // Query phone here. Covered next
-//                        while (thephonenumber.moveToNext()) {
-//                            String aphoneNumber = thephonenumber.getString(thephonenumber.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-//                            Log.i("Number", aphoneNumber);
-//                        }
+
+//            if (pCur != null) {
+//                if (pCur.getCount() == 0);
+//                pCur.moveToFirst();
+//                {
+//                    Toast.makeText(MainActivity.this, "No contacts in your contact list.", Toast.LENGTH_LONG).show();
+//                }
 
 
-//                    String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.Contacts.CONTACT_STATUS));
+            if (phones != null) {
+                if (phones.getCount() == 0) {
+                    Toast.makeText(MainActivity.this, "No contacts in your contact list.", Toast.LENGTH_LONG).show();
+                }
+
+                while (pCur.moveToNext()) {
+//                    int phoneType = pCur.getInt(pCur.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.TYPE));
+                    String phoneNumber = pCur.getString(pCur.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
+//                    Log.e("phone type", phoneType);
+                    Log.e("phone number", phoneNumber);
+                    Log.e("phone numberrr", "hi there");
+                }
+            }
+//                    **************************
+                    //        this is the original phone cursor, which counts 196 (has duplicates)
+//        from https://trinitytuts.com/get-contact-list-and-show-in-custom-listview-android/
+
+//                    Bitmap bit_thumb = null;
+//                    String id = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID));
+//                    String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+//                    String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
 //                    String EmailAddr = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Email.DATA2));
 //                    String image_thumb = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI));
 //                    try {
@@ -272,72 +188,52 @@ class LoadContact extends AsyncTask<Void, Void, Void> {
 //                    } catch (IOException e) {
 //                        e.printStackTrace();
 //                    }
-
-//what's happening here? For every user in the phonebook, show an image, the name, number, an id and maybe a checkbox?
+//**************************************************
                     SelectContact selectContact = new SelectContact();
 //                    selectContact.setThumb(bit_thumb);
-//                    selectContact.setName(nametwo);
                     selectContact.setName(name);
-                    selectContact.setPhone(phoneNumber);
+//                    selectContact.setPhone(phoneNumber);
 //                    selectContact.setEmail(id);
 //                    selectContact.setCheckedBox(false);
                     selectContacts.add(selectContact);
-                }
-//                Log.e("Cursor close 1", "----------------");
-                Log.e("phones", "" + phones.getCount());
-                Log.e("phonestwo", "" + phonestwo.getCount());
-                Log.e("Contact ID", phoneContactId);
-            }
 
+//             else {
+//                Log.e("Cursor close 1", "----------------");
+//            }
+            //phones.close();
+            return null;
         }
 
-        phones.close();
-        return null;
+        @Override
+        protected void onPostExecute(Void aVoid) {
+            super.onPostExecute(aVoid);
+            adapter = new SelectContactAdapter(selectContacts, MainActivity.this);
+            listView.setAdapter(adapter);
+
+            // Select item on listclick
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+                    Log.e("search", "here---------------- listener");
+                    Log.e("phonescount", "" + phones.getCount());
+                    Log.e("names", "" + name);
+                    Log.e("phone number", phoneNumber);
+//                    String err = (phoneContactId==null)?"phonecontactID":phoneContactId;
+                    Log.i("phonecontactID", phoneContactId);
+
+                    SelectContact data = selectContacts.get(i);
+                }
+            });
+
+            listView.setFastScrollEnabled(true);
+        }
     }
 
     @Override
-//        when DoInBackground is finished, when we have our phone number, name etc... display the results in our listview.
-    protected void onPostExecute(Void aVoid) {
-        super.onPostExecute(aVoid);
-        adapter = new SelectContactAdapter(selectContacts, MainActivity.this);
-        listView.setAdapter(adapter);
-
-        // Select item on listclick
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                Log.e("search", "here---------------- listener");
-
-                SelectContact data = selectContacts.get(i);
-            }
-        });
-
-        listView.setFastScrollEnabled(true);
+    protected void onStop() {
+        super.onStop();
+        phones.close();
+//        pCur.close();
     }
-
-
-//    @Override
-//    protected void onStop() {
-//        super.onStop();
-//        phones.close();
-//    }
 }
-
-//    public String getPhoneNumber(String name, Context context) {
-//        String ret = null;
-//        String selection = ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME+" like'%" + name +"%'";
-//        String[] projection = new String[] { ContactsContract.CommonDataKinds.Phone.NUMBER};
-//        Cursor phonestwo = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
-//                projection, selection, null, null);
-//                    if (phonestwo.moveToFirst()) {
-//                        ret = phonestwo.getString(0);
-//                    }
-//                    phonestwo.close();
-//                    if(ret==null)
-//                        ret = "Unsaved";
-//                    return ret;
-//    }
-}
-
-//*****************************
