@@ -55,7 +55,8 @@ public class MainActivity extends Activity {
 //        phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
 
         if (phones != null) {
-        phones.moveToFirst();}
+            phones.moveToFirst();
+        }
 
 // this query only return contacts with phone number and is not duplicated
         phones = getContentResolver().query(
@@ -74,16 +75,17 @@ public class MainActivity extends Activity {
         Log.e("phonesblahh", "" + phones.getCount());
 
         if (phones != null) {
-            phones.moveToFirst();}
+            phones.moveToFirst();
+        }
         String phoneContactId = phones.getString(phones.getColumnIndexOrThrow(BaseColumns._ID));
 
-            if (pCur != null) {
-                pCur.moveToFirst();}
+        if (pCur != null) {
+            pCur.moveToFirst();
+        }
 //        pCur.moveToFirst();
         pCur = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[] { phoneContactId }, null);
+                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{phoneContactId}, null);
         Log.e("pCurcount", "" + pCur.getCount());
-
 
 
 //            Remember to move the cursor to the first row, whenever dealing with cursors
@@ -123,18 +125,19 @@ public class MainActivity extends Activity {
 
         }
 
+
         @Override
         protected Void doInBackground(Void... voids) {
             // Get Contact list from Phone
 
-
-
             if (phones != null) {
+                phones.moveToFirst();
+
                 if (phones.getCount() == 0) {
                     Toast.makeText(MainActivity.this, "No contacts in your contact list.", Toast.LENGTH_LONG).show();
                 }
-//
-//
+
+
                 while (phones.moveToNext()) {
 
                     String name = phones.getString(phones.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
@@ -142,8 +145,8 @@ public class MainActivity extends Activity {
                     Log.e("phonescount", "" + phones.getCount());
                     Log.e("names", "" + name);
 //                    Log.e("The number of ID:", phoneContactId);
-                }
-            }
+
+
 //                    Cursor pCur = context.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
 //                            ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[] { phoneContactId }, null);
 //
@@ -156,21 +159,21 @@ public class MainActivity extends Activity {
 //                }
 
 
-            if (phones != null) {
-                if (phones.getCount() == 0) {
-                    Toast.makeText(MainActivity.this, "No contacts in your contact list.", Toast.LENGTH_LONG).show();
-                }
-
-                while (pCur.moveToNext()) {
-//                    int phoneType = pCur.getInt(pCur.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.TYPE));
-                    String phoneNumber = pCur.getString(pCur.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
-//                    Log.e("phone type", phoneType);
-                    Log.e("phone number", phoneNumber);
-                    Log.e("phone numberrr", "hi there");
-                }
-            }
+//            if (phones != null) {
+//                if (phones.getCount() == 0) {
+//                    Toast.makeText(MainActivity.this, "No contacts in your contact list.", Toast.LENGTH_LONG).show();
+//                }
+//
+//                while (pCur.moveToNext()) {
+////                    int phoneType = pCur.getInt(pCur.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.TYPE));
+//                    String phoneNumber = pCur.getString(pCur.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
+////                    Log.e("phone type", phoneType);
+//                    Log.e("phone number", phoneNumber);
+//                    Log.e("phone numberrr", "hi there");
+//                }
+//            }
 //                    **************************
-                    //        this is the original phone cursor, which counts 196 (has duplicates)
+            //        this is the original phone cursor, which counts 196 (has duplicates)
 //        from https://trinitytuts.com/get-contact-list-and-show-in-custom-listview-android/
 
 //                    Bitmap bit_thumb = null;
@@ -189,20 +192,24 @@ public class MainActivity extends Activity {
 //                        e.printStackTrace();
 //                    }
 //**************************************************
-                    SelectContact selectContact = new SelectContact();
+            SelectContact selectContact = new SelectContact();
 //                    selectContact.setThumb(bit_thumb);
-                    selectContact.setName(name);
-//                    selectContact.setPhone(phoneNumber);
+            selectContact.setName(name);
+                    selectContact.setPhone(phoneNumber);
 //                    selectContact.setEmail(id);
 //                    selectContact.setCheckedBox(false);
-                    selectContacts.add(selectContact);
+            selectContacts.add(selectContact);
 
 //             else {
 //                Log.e("Cursor close 1", "----------------");
-//            }
-            //phones.close();
-            return null;
+            }
+//            phones.close();
+
         }
+            return null;
+    }
+
+
 
         @Override
         protected void onPostExecute(Void aVoid) {
@@ -215,6 +222,9 @@ public class MainActivity extends Activity {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
+                    if (phones != null) {
+                        phones.moveToFirst();
+                    }
                     Log.e("search", "here---------------- listener");
                     Log.e("phonescount", "" + phones.getCount());
                     Log.e("names", "" + name);
@@ -228,7 +238,10 @@ public class MainActivity extends Activity {
 
             listView.setFastScrollEnabled(true);
         }
-    }
+
+
+
+}
 
     @Override
     protected void onStop() {
