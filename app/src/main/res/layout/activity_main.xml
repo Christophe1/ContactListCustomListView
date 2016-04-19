@@ -38,7 +38,7 @@
         android:drawableLeft="@android:drawable/ic_menu_search"
         android:padding="8dp"
         android:queryHint="howdy"
-        android:inputType="phone"
         android:singleLine="true"
         />
+    <!--android:inputType="phone"-->
 </RelativeLayout>

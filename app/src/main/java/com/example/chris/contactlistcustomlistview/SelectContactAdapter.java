@@ -75,7 +75,7 @@ public class SelectContactAdapter extends BaseAdapter {
 //      So, for example, title is cast to the name id, in activity main,
 //        phone is cast to the id called no etc
         v.title = (TextView) view.findViewById(R.id.name);
-        v.check = (CheckBox) view.findViewById(R.id.check);
+//        v.check = (CheckBox) view.findViewById(R.id.check);
         v.phone = (TextView) view.findViewById(R.id.no);
 //        v.imageView = (ImageView) view.findViewById(R.id.pic);
 
@@ -83,7 +83,7 @@ public class SelectContactAdapter extends BaseAdapter {
 //
         final SelectContact data = (SelectContact) _data.get(i);
         v.title.setText(data.getName());
-        v.check.setChecked(data.getCheckedBox());
+//        v.check.setChecked(data.getCheckedBox());
         v.phone.setText(data.getPhone());
 
         // Set image if exists
@@ -104,7 +104,7 @@ public class SelectContactAdapter extends BaseAdapter {
 //            e.printStackTrace();
 //        }
 
-        Log.e("Image Thumb", "--------------" + data.getThumb());
+//        Log.e("Image Thumb", "--------------" + data.getThumb());
 
         /*// Set check box listener android
         v.check.setOnClickListener(new View.OnClickListener() {
@@ -126,19 +126,21 @@ public class SelectContactAdapter extends BaseAdapter {
     // Filter Class
     public void filter(String charText) {
         charText = charText.toLowerCase(Locale.getDefault());
-//        _data is our list of Users, or contacts
+//        _data is our list of contacts
         _data.clear();
-//        If there is nothing in the searchview,
+//        If there is nothing in the searchview, if the charText length is 0,
 //        then show all the contacts
         if (charText.length() == 0) {
             _data.addAll(arraylist);
 //            or else....
         } else {
             for (SelectContact wp : arraylist) {
-//                If a contact's phone number matches the input thus far that the user
-//                is filtering for, then include it in the listview.
-                if (wp.getPhone().toLowerCase(Locale.getDefault())
-                        .contains(charText)) {
+//                If a contact's name matches the input thus far, which is charText,
+//                then include it in the listview.
+                if (wp.getName().toLowerCase(Locale.getDefault())
+                        .contains(charText)) || (wp.getPhone().toLowerCase(Locale.getDefault())
+                        .contains(charText))
+                     {
 
 
 //                    int flag = 0;
@@ -159,11 +161,8 @@ public class SelectContactAdapter extends BaseAdapter {
 //                    }
 
 
-
-
-
-                    _data.add(wp);
-                }
+                        _data.add(wp);
+                    }
             }
         }
         notifyDataSetChanged();

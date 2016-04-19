@@ -19,7 +19,10 @@ package com.example.chris.contactlistcustomlistview;
 
         import java.io.IOException;
         import java.util.ArrayList;
+        import java.util.HashMap;
+        import java.util.HashSet;
         import java.util.List;
+        import java.util.Set;
 
 public class MainActivity extends Activity {
 
@@ -40,6 +43,12 @@ public class MainActivity extends Activity {
     String name;
     String phoneNumber;
 
+    //    *****18-04-2016***
+    Cursor cursor;
+    ListView mainListView;
+    ArrayList hashMapsArrayList;
+//    *****
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,38 +63,38 @@ public class MainActivity extends Activity {
 //        from https://trinitytuts.com/get-contact-list-and-show-in-custom-listview-android/
 //        phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
 
-        if (phones != null) {
-            phones.moveToFirst();
-        }
-
-// this query only return contacts with phone number and is not duplicated
-        phones = getContentResolver().query(
-//                the table to query
-                ContactsContract.Contacts.CONTENT_URI,
-//                the columns to return
-                null,
-//               selection criteria :
-// we only want contacts that have a name and a phone number. If they have a phone number, the value is 1 (if not, it is 0)
-                ContactsContract.Contacts.IN_VISIBLE_GROUP + " = '" + ("1") + "'" + " AND " + ContactsContract.Contacts.HAS_PHONE_NUMBER + "=1",
-//               selection criteria
-                null,
-//                display in ascending order
-                ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
-
-        Log.e("phonesblahh", "" + phones.getCount());
-
-        if (phones != null) {
-            phones.moveToFirst();
-        }
-        String phoneContactId = phones.getString(phones.getColumnIndexOrThrow(BaseColumns._ID));
-
-        if (pCur != null) {
-            pCur.moveToFirst();
-        }
-//        pCur.moveToFirst();
-        pCur = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{phoneContactId}, null);
-        Log.e("pCurcount", "" + pCur.getCount());
+//        if (phones != null) {
+//            phones.moveToFirst();
+//        }
+//
+//// this query only return contacts with phone number and is not duplicated
+//        phones = getContentResolver().query(
+////                the table to query
+//                ContactsContract.Contacts.CONTENT_URI,
+////                the columns to return
+//                null,
+////               selection criteria :
+//// we only want contacts that have a name and a phone number. If they have a phone number, the value is 1 (if not, it is 0)
+//                ContactsContract.Contacts.IN_VISIBLE_GROUP + " = '" + ("1") + "'" + " AND " + ContactsContract.Contacts.HAS_PHONE_NUMBER + "=1",
+////               selection criteria
+//                null,
+////                display in ascending order
+//                ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
+//
+//        Log.e("phonesblahh", "" + phones.getCount());
+//
+//        if (phones != null) {
+//            phones.moveToFirst();
+//        }
+//        String phoneContactId = phones.getString(phones.getColumnIndexOrThrow(BaseColumns._ID));
+//
+//        if (pCur != null) {
+//            pCur.moveToFirst();
+//        }
+////        pCur.moveToFirst();
+//        pCur = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+//                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{phoneContactId}, null);
+//        Log.e("pCurcount", "" + pCur.getCount());
 
 
 //            Remember to move the cursor to the first row, whenever dealing with cursors
@@ -130,20 +139,83 @@ public class MainActivity extends Activity {
         protected Void doInBackground(Void... voids) {
             // Get Contact list from Phone
 
-            if (phones != null) {
-                phones.moveToFirst();
 
-                if (phones.getCount() == 0) {
-                    Toast.makeText(MainActivity.this, "No contacts in your contact list.", Toast.LENGTH_LONG).show();
+            if (cursor != null) {
+                cursor.moveToFirst();
+            }
+            try {
+
+                cursor = getApplicationContext().getContentResolver()
+                        .query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
+                int Idx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID);
+                int nameIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+
+                int phoneNumberIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                int photoIdIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI);
+                cursor.moveToFirst();
+
+
+                Set<String> ids = new HashSet<>();
+                do {
+                    System.out.println("=====>in while");
+                    String contactid = cursor.getString(Idx);
+                    if (!ids.contains(contactid)) {
+                        ids.add(contactid);
+                        HashMap<String, String> hashMap = new HashMap<String, String>();
+                        String name = cursor.getString(nameIdx);
+                        String phoneNumber = cursor.getString(phoneNumberIdx);
+                        String image = cursor.getString(photoIdIdx);
+//                    System.out.println("Id--->"+contactid+"Name--->"+name);
+                        System.out.println("Id--->" + contactid + "Name--->" + name);
+                        System.out.println("Id--->" + contactid + "Number--->" + phoneNumber);
+
+                        if (!phoneNumber.contains("*")) {
+                            hashMap.put("contactid", "" + contactid);
+                            hashMap.put("name", "" + name);
+                            hashMap.put("phoneNumber", "" + phoneNumber);
+                            hashMap.put("image", "" + image);
+                            // hashMap.put("email", ""+email);
+                            if (hashMapsArrayList != null) {
+                                hashMapsArrayList.add(hashMap);
+                            }
+//                    hashMapsArrayList.add(hashMap);
+                        }
+
+                        SelectContact selectContact = new SelectContact();
+//                    selectContact.setThumb(bit_thumb);
+                        selectContact.setName(name);
+                        selectContact.setPhone(phoneNumber);
+//                    selectContact.setEmail(id);
+//                    selectContact.setCheckedBox(false);
+                        selectContacts.add(selectContact);
+                    }
+
+
+
+                } while (cursor.moveToNext());
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                if (cursor != null) {
+                    cursor.close();
                 }
-
-
-                while (phones.moveToNext()) {
-
-                    String name = phones.getString(phones.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
-//                    String phoneContactId = phones.getString(phones.getColumnIndexOrThrow(BaseColumns._ID));
-                    Log.e("phonescount", "" + phones.getCount());
-                    Log.e("names", "" + name);
+            }
+//            if (phones != null) {
+//                phones.moveToFirst();
+//
+//                if (phones.getCount() == 0) {
+//                    Toast.makeText(MainActivity.this, "No contacts in your contact list.", Toast.LENGTH_LONG).show();
+//                }
+//
+//
+//                while (phones.moveToNext()) {
+//
+//                    String name = phones.getString(phones.getColumnIndex(ContactsContract.Contacts.DISPLAY_NAME));
+////                    String phoneContactId = phones.getString(phones.getColumnIndexOrThrow(BaseColumns._ID));
+//                    Log.e("phonescount", "" + phones.getCount());
+//                    Log.e("names", "" + name);
 //                    Log.e("The number of ID:", phoneContactId);
 
 
@@ -192,24 +264,23 @@ public class MainActivity extends Activity {
 //                        e.printStackTrace();
 //                    }
 //**************************************************
-            SelectContact selectContact = new SelectContact();
-//                    selectContact.setThumb(bit_thumb);
-            selectContact.setName(name);
-                    selectContact.setPhone(phoneNumber);
-//                    selectContact.setEmail(id);
-//                    selectContact.setCheckedBox(false);
-            selectContacts.add(selectContact);
+//            SelectContact selectContact = new SelectContact();
+////                    selectContact.setThumb(bit_thumb);
+//            selectContact.setName(name);
+//            selectContact.setPhone(phoneNumber);
+////                    selectContact.setEmail(id);
+////                    selectContact.setCheckedBox(false);
+//            selectContacts.add(selectContact);
 
 //             else {
 //                Log.e("Cursor close 1", "----------------");
-            }
+
 //            phones.close();
 
-        }
-            return null;
+
+        return null;
+
     }
-
-
 
         @Override
         protected void onPostExecute(Void aVoid) {
@@ -218,35 +289,35 @@ public class MainActivity extends Activity {
             listView.setAdapter(adapter);
 
             // Select item on listclick
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
-                    if (phones != null) {
-                        phones.moveToFirst();
-                    }
-                    Log.e("search", "here---------------- listener");
-                    Log.e("phonescount", "" + phones.getCount());
-                    Log.e("names", "" + name);
-                    Log.e("phone number", phoneNumber);
-//                    String err = (phoneContactId==null)?"phonecontactID":phoneContactId;
-                    Log.i("phonecontactID", phoneContactId);
-
-                    SelectContact data = selectContacts.get(i);
-                }
-            });
+//            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                @Override
+//                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+//
+//                    if (phones != null) {
+//                        phones.moveToFirst();
+//                    }
+//                    Log.e("search", "here---------------- listener");
+//                    Log.e("phonescount", "" + phones.getCount());
+//                    Log.e("names", "" + name);
+//                    Log.e("phone number", phoneNumber);
+////                    String err = (phoneContactId==null)?"phonecontactID":phoneContactId;
+//                    Log.i("phonecontactID", phoneContactId);
+//
+//                    SelectContact data = selectContacts.get(i);
+//                }
+//            });
 
             listView.setFastScrollEnabled(true);
         }
 
+    }
 
 
-}
 
     @Override
     protected void onStop() {
         super.onStop();
-        phones.close();
-//        pCur.close();
+
     }
+
 }
