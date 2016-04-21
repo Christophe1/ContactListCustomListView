@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <drawable name="color_one">#ff0000</drawable>
+    <drawable name="color_two">#ff0000</drawable>
+    <drawable name="color_three">#ffffffff</drawable>
+</resources>

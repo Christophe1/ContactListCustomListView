@@ -40,5 +40,6 @@
         android:queryHint="howdy"
         android:singleLine="true"
         />
-    <!--android:inputType="phone"-->
+    <!--android:inputType="phone|text"-->
+
 </RelativeLayout>

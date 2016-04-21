@@ -9,6 +9,7 @@ package com.example.chris.contactlistcustomlistview;
         import android.view.ViewGroup;
         import android.widget.BaseAdapter;
         import android.widget.CheckBox;
+        import android.widget.ImageView;
         import android.widget.TextView;
 
 //        import com.trinitygetcontact.R;
@@ -60,10 +61,10 @@ public class SelectContactAdapter extends BaseAdapter {
         if (view == null) {
             LayoutInflater li = (LayoutInflater) _c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = li.inflate(R.layout.inflate_listview, null);
-            Log.e("Inside", "here--------------------------- In view1");
+//            Log.e("Inside", "here--------------------------- In view1");
         } else {
             view = convertView;
-            Log.e("Inside", "here--------------------------- In view2");
+//            Log.e("Inside", "here--------------------------- In view2");
         }
 
 //        we are making a cell format in the ListView, which will contain info like
@@ -77,7 +78,7 @@ public class SelectContactAdapter extends BaseAdapter {
         v.title = (TextView) view.findViewById(R.id.name);
 //        v.check = (CheckBox) view.findViewById(R.id.check);
         v.phone = (TextView) view.findViewById(R.id.no);
-//        v.imageView = (ImageView) view.findViewById(R.id.pic);
+        v.imageView = (ImageView) view.findViewById(R.id.arrowright);
 
 //        for each new cell with title, name, number etc...
 //
@@ -137,9 +138,9 @@ public class SelectContactAdapter extends BaseAdapter {
             for (SelectContact wp : arraylist) {
 //                If a contact's name matches the input thus far, which is charText,
 //                then include it in the listview.
-                if (wp.getName().toLowerCase(Locale.getDefault())
+                if ((wp.getName().toLowerCase(Locale.getDefault())
                         .contains(charText)) || (wp.getPhone().toLowerCase(Locale.getDefault())
-                        .contains(charText))
+                        .contains(charText)))
                      {
 
 
@@ -171,7 +172,7 @@ public class SelectContactAdapter extends BaseAdapter {
 
     static class ViewHolder {
 //        In each cell in the listview show a name and phone number
-//        ImageView imageView;
+        ImageView imageView;
         TextView title, phone;
         CheckBox check;
     }

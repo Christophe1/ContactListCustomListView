@@ -2,6 +2,7 @@ package com.example.chris.contactlistcustomlistview;
 
         import android.app.Activity;
         import android.content.ContentResolver;
+        import android.content.Intent;
         import android.database.Cursor;
         import android.graphics.Bitmap;
         import android.net.Uri;
@@ -124,6 +125,8 @@ public class MainActivity extends Activity {
                 return false;
             }
         });
+
+
     }
 
     // Load data on background
@@ -311,8 +314,12 @@ public class MainActivity extends Activity {
         }
 
     }
-
-
+//the is the arrow image, it opens the activity for edit or new contact
+    public void EditorCreateContact(View v)
+    {
+        Intent intent = new Intent(getApplicationContext(), EditorNewContact.class);
+        startActivity(intent);
+    }
 
     @Override
     protected void onStop() {
