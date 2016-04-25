@@ -171,9 +171,9 @@ public class SelectContactAdapter extends BaseAdapter {
 
 
     static class ViewHolder {
-//        In each cell in the listview show a name and phone number
+//        In each cell in the listview show the items you want to have
         ImageView imageView;
         TextView title, phone;
-        CheckBox check;
+//        CheckBox check;
     }
 }

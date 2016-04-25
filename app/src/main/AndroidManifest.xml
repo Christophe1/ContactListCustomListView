@@ -24,7 +24,13 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".EditorNewContact">
+        <activity
+            android:name=".EditorNewContact">
+            <intent-filter>
+                <action android:name="com.example.chris.contactlistcustomlistview.EditorNewContact" />
+
+
+            </intent-filter>
 
         </activity>
     </application>

@@ -33,7 +33,7 @@ public class MainActivity extends Activity {
     // Contact List
     ListView listView;
     // Cursor to load contacts list
-    Cursor phones, email;
+//    Cursor phones, email;
     Cursor pCur;
 
     // Pop up
@@ -48,6 +48,7 @@ public class MainActivity extends Activity {
     Cursor cursor;
     ListView mainListView;
     ArrayList hashMapsArrayList;
+//    String contactid;
 //    *****
 
     @Override
@@ -161,7 +162,8 @@ public class MainActivity extends Activity {
                 Set<String> ids = new HashSet<>();
                 do {
                     System.out.println("=====>in while");
-                    String contactid = cursor.getString(Idx);
+
+                     String contactid = cursor.getString(Idx);
                     if (!ids.contains(contactid)) {
                         ids.add(contactid);
                         HashMap<String, String> hashMap = new HashMap<String, String>();
@@ -169,8 +171,8 @@ public class MainActivity extends Activity {
                         String phoneNumber = cursor.getString(phoneNumberIdx);
                         String image = cursor.getString(photoIdIdx);
 //                    System.out.println("Id--->"+contactid+"Name--->"+name);
-                        System.out.println("Id--->" + contactid + "Name--->" + name);
-                        System.out.println("Id--->" + contactid + "Number--->" + phoneNumber);
+                        System.out.println("Id--->" + contactid + " Name--->" + name);
+                        System.out.println("Id--->" + contactid + " Number--->" + phoneNumber);
 
                         if (!phoneNumber.contains("*")) {
                             hashMap.put("contactid", "" + contactid);
@@ -194,16 +196,15 @@ public class MainActivity extends Activity {
                     }
 
 
-
                 } while (cursor.moveToNext());
 
 
             } catch (Exception e) {
                 e.printStackTrace();
             } finally {
-                if (cursor != null) {
-                    cursor.close();
-                }
+//                if (cursor != null) {
+//                    cursor.close();
+//                }
             }
 //            if (phones != null) {
 //                phones.moveToFirst();
@@ -281,44 +282,71 @@ public class MainActivity extends Activity {
 //            phones.close();
 
 
-        return null;
+            return null;
 
-    }
+        }
 
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
+
             adapter = new SelectContactAdapter(selectContacts, MainActivity.this);
             listView.setAdapter(adapter);
 
+
             // Select item on listclick
-//            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                @Override
-//                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-//
-//                    if (phones != null) {
-//                        phones.moveToFirst();
-//                    }
-//                    Log.e("search", "here---------------- listener");
-//                    Log.e("phonescount", "" + phones.getCount());
-//                    Log.e("names", "" + name);
-//                    Log.e("phone number", phoneNumber);
-////                    String err = (phoneContactId==null)?"phonecontactID":phoneContactId;
-//                    Log.i("phonecontactID", phoneContactId);
-//
-//                    SelectContact data = selectContacts.get(i);
-//                }
-//            });
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-            listView.setFastScrollEnabled(true);
+                    if (cursor != null) {
+//                                    get the cursor id of the clicked position
+                        cursor.moveToPosition(i);
+
+                        String contactlookupkey = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.LOOKUP_KEY));
+
+                        String contactname = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+
+                        String contactphoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+
+                        Intent intent = new Intent(getApplicationContext(), EditorNewContact.class);
+
+                        //Create the bundle
+                        Bundle bundle = new Bundle();
+
+                        //Add your data to bundle
+                        bundle.putString("lookup_key", contactlookupkey);
+
+                        //Add the bundle to the intent
+                        intent.putExtras(bundle);
+                        startActivity(intent);
+
+
+
+
+//                        Toast.makeText(getApplicationContext(), usercontactid, Toast.LENGTH_LONG).show();
+                    }
+
+
+                }
+
+
+
+
+            });
+
+                    listView.setFastScrollEnabled(true);
+                }
+
+
         }
-
-    }
+//    }
 //the is the arrow image, it opens the activity for edit or new contact
     public void EditorCreateContact(View v)
     {
-        Intent intent = new Intent(getApplicationContext(), EditorNewContact.class);
-        startActivity(intent);
+
+       Intent intent = new Intent(getApplicationContext(), EditorNewContact.class);
+       startActivity(intent);
     }
 
     @Override
