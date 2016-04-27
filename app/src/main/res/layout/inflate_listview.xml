@@ -61,7 +61,9 @@
         android:id="@+id/arrowright"
         android:background="@drawable/buttonstates"
         android:src="@drawable/arrowright"
-        android:onClick="EditorCreateContact"/>
+        android:onClick="EditorCreateContact"
+        android:clickable="true"
+        />
 
     </LinearLayout>
 

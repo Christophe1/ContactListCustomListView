@@ -2,6 +2,7 @@ package com.example.chris.contactlistcustomlistview;
 
         import android.app.Activity;
         import android.content.ContentResolver;
+        import android.content.ContentUris;
         import android.content.Intent;
         import android.database.Cursor;
         import android.graphics.Bitmap;
@@ -14,6 +15,7 @@ package com.example.chris.contactlistcustomlistview;
         import android.util.Log;
         import android.view.View;
         import android.widget.AdapterView;
+        import android.widget.ImageView;
         import android.widget.ListView;
         import android.widget.SearchView;
         import android.widget.Toast;
@@ -50,6 +52,7 @@ public class MainActivity extends Activity {
     ArrayList hashMapsArrayList;
 //    String contactid;
 //    *****
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -300,54 +303,82 @@ public class MainActivity extends Activity {
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
                     if (cursor != null) {
+
 //                                    get the cursor id of the clicked position
                         cursor.moveToPosition(i);
-
-                        String contactlookupkey = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.LOOKUP_KEY));
-
-                        String contactname = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-
-                        String contactphoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-
-                        Intent intent = new Intent(getApplicationContext(), EditorNewContact.class);
-
-                        //Create the bundle
-                        Bundle bundle = new Bundle();
-
-                        //Add your data to bundle
-                        bundle.putString("lookup_key", contactlookupkey);
-
-                        //Add the bundle to the intent
-                        intent.putExtras(bundle);
-                        startActivity(intent);
-
-
-
-
-//                        Toast.makeText(getApplicationContext(), usercontactid, Toast.LENGTH_LONG).show();
                     }
+                        String contactlookupkey = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.LOOKUP_KEY));
+////
+//                        String contactname = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+//
+//                        String contactphoneNumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+//
+//                        Intent intent = new Intent(getApplicationContext(), EditorNewContact.class);
+//
+                        //Create the bundle
+//                        Bundle bundle = new Bundle();
+//
+//                    }
+                        //Add your data to bundle
+//                        bundle.putString("lookup_key", contactlookupkey);
+//                      ****************************************8
+
+    /*
+     * Once the user has selected a contact to edit,
+     * this gets the contact's lookup key and _ID values from the
+     * cursor and creates the necessary URI.
+     */
 
 
-                }
+                    // Creates a new Intent to edit a contact
+//                    Intent editIntent = new Intent(Intent.ACTION_EDIT);
+                        Log.e("llokupkey", contactlookupkey);
+    /*
+     * Sets the contact URI to edit, and the data type that the
+     * Intent must match
+     */
+                        // Creates a new Intent to edit a contact
+//                        Intent intent = new Intent(Intent.ACTION_EDIT);
+//                        //Add the bundle to the intent
+//                        intent.putExtras(bundle);
+//                        start the intent
 
+//                        startActivity(editIntent);
+                    Intent intent = new Intent(Intent.ACTION_EDIT);
+                    intent.setData(ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.LOOKUP_KEY)));
+                    // Sets the special extended data for navigation
+                    intent.putExtra("finishActivityOnSaveCompleted", true);
+                    startActivity(intent);
+//
+//
+//
+////                        Toast.makeText(getApplicationContext(), usercontactid, Toast.LENGTH_LONG).show();
 
-
-
-            });
+//
+//
+//                }
+//
+//
+//
+//
+//            });
 
                     listView.setFastScrollEnabled(true);
                 }
 
 
-        }
-//    }
+        });
+    }}
 //the is the arrow image, it opens the activity for edit or new contact
     public void EditorCreateContact(View v)
     {
 
-       Intent intent = new Intent(getApplicationContext(), EditorNewContact.class);
-       startActivity(intent);
-    }
+//                    Intent intent = new Intent(getApplicationContext(), EditorNewContact.class);
+//
+//
+//                        startActivity(intent);
+                    }
+
 
     @Override
     protected void onStop() {
