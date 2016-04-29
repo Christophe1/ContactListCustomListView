@@ -5,6 +5,7 @@ package com.example.chris.contactlistcustomlistview;
         import android.content.ContentUris;
         import android.content.Intent;
         import android.database.Cursor;
+        import android.database.DatabaseUtils;
         import android.graphics.Bitmap;
         import android.net.Uri;
         import android.os.AsyncTask;
@@ -18,6 +19,7 @@ package com.example.chris.contactlistcustomlistview;
         import android.widget.ImageView;
         import android.widget.ListView;
         import android.widget.SearchView;
+        import android.widget.TextView;
         import android.widget.Toast;
 
         import java.io.IOException;
@@ -44,7 +46,8 @@ public class MainActivity extends Activity {
     SelectContactAdapter adapter;
     String phoneContactId;
     String name;
-    String phoneNumber;
+    CharSequence nameofcontact;
+//    String phoneNumber;
 
     //    *****18-04-2016***
     Cursor cursor;
@@ -144,11 +147,25 @@ public class MainActivity extends Activity {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            // Get Contact list from Phone
-
 
             if (cursor != null) {
                 cursor.moveToFirst();
+
+
+                // Get Contact list from Phone
+//                cursor = getApplicationContext().getContentResolver()
+//                        .query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
+//
+//                int Idx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID);
+//                int nameIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+//
+//                int phoneNumberIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+//                int photoIdIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI);
+//
+//                String name = cursor.getString(nameIdx);
+//                String phoneNumber = cursor.getString(phoneNumberIdx);
+//                String image = cursor.getString(photoIdIdx);
+
             }
             try {
 
@@ -166,13 +183,13 @@ public class MainActivity extends Activity {
                 do {
                     System.out.println("=====>in while");
 
-                     String contactid = cursor.getString(Idx);
+                    String contactid = cursor.getString(Idx);
                     if (!ids.contains(contactid)) {
                         ids.add(contactid);
                         HashMap<String, String> hashMap = new HashMap<String, String>();
-                        String name = cursor.getString(nameIdx);
+                        name = cursor.getString(nameIdx);
                         String phoneNumber = cursor.getString(phoneNumberIdx);
-                        String image = cursor.getString(photoIdIdx);
+//                        String image = cursor.getString(photoIdIdx);
 //                    System.out.println("Id--->"+contactid+"Name--->"+name);
                         System.out.println("Id--->" + contactid + " Name--->" + name);
                         System.out.println("Id--->" + contactid + " Number--->" + phoneNumber);
@@ -181,7 +198,7 @@ public class MainActivity extends Activity {
                             hashMap.put("contactid", "" + contactid);
                             hashMap.put("name", "" + name);
                             hashMap.put("phoneNumber", "" + phoneNumber);
-                            hashMap.put("image", "" + image);
+//                            hashMap.put("image", "" + image);
                             // hashMap.put("email", ""+email);
                             if (hashMapsArrayList != null) {
                                 hashMapsArrayList.add(hashMap);
@@ -206,7 +223,7 @@ public class MainActivity extends Activity {
                 e.printStackTrace();
             } finally {
 //                if (cursor != null) {
-//                    cursor.close();
+                cursor.close();
 //                }
             }
 //            if (phones != null) {
@@ -292,7 +309,10 @@ public class MainActivity extends Activity {
         @Override
         protected void onPostExecute(Void aVoid) {
             super.onPostExecute(aVoid);
-
+//into each inflate_listview, put a name and phone number, which are the details making
+//            our SelectContact, above. And SelectContacts is all these inflate_listviews together
+//            This is the first property of our SelectContactAdapter, a list
+//            The next part, MainActivity.this, is our context, which is where we want the list to appear
             adapter = new SelectContactAdapter(selectContacts, MainActivity.this);
             listView.setAdapter(adapter);
 
@@ -302,12 +322,33 @@ public class MainActivity extends Activity {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
-                    if (cursor != null) {
+//                    cursor = getApplicationContext().getContentResolver()
+//                            .query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
+//
+//                    if (cursor != null) {
+////                        cursor.moveToFirst();
+////                                    get the cursor id of the clicked position
+//                        cursor.moveToPosition(i);
+                         nameofcontact = ((TextView)view.findViewById(R.id.name)).getText();
+//                    }
+                    // Creates a new Intent to edit a contact
+                        Intent intent = new Intent(Intent.ACTION_EDIT);
+//                        //Add the bundle to the intent
+//                        intent.putExtras(bundle);
+//                        start the intent
 
-//                                    get the cursor id of the clicked position
-                        cursor.moveToPosition(i);
-                    }
-                        String contactlookupkey = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.LOOKUP_KEY));
+//                        startActivity(editIntent);
+//                    Intent intent = new Intent(Intent.ACTION_EDIT);
+//                    intent.setData(ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.LOOKUP_KEY)));
+//                    // Sets the special extended data for navigation
+//                    intent.putExtra("finishActivityOnSaveCompleted", true);
+//                    intent.putExtra(ContactsContract.Intents.Insert.NAME, nameofcontact);
+
+                    startActivity(intent);
+
+
+//******************************************
+//                        String contactlookupkey = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.LOOKUP_KEY));
 ////
 //                        String contactname = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
 //
@@ -330,25 +371,26 @@ public class MainActivity extends Activity {
      */
 
 
-                    // Creates a new Intent to edit a contact
+                        // Creates a new Intent to edit a contact
 //                    Intent editIntent = new Intent(Intent.ACTION_EDIT);
-                        Log.e("llokupkey", contactlookupkey);
+//                        Log.e("lookupkey", contactlookupkey);
+//                        String contactphonenumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+//                        Log.e("Name", toString(nameddd));
+                    System.out.println(nameofcontact);
+//                        Log.e("phone", phoneNumber);
+                        Log.d("index value", String.valueOf(i));
+//                    Log.v("cursor position", DatabaseUtils.dumpCursorToString(cursor.getPosition(i)));
+//                    DatabaseUtils.dumpCursorToString(cursor);
+//                    public static String dumpCursorToString(cursor);
+//                        Log.d("cursor position", String.valueOf(cursor.moveToPosition(i)));
+
+                    cursor.close();
+
     /*
      * Sets the contact URI to edit, and the data type that the
      * Intent must match
      */
-                        // Creates a new Intent to edit a contact
-//                        Intent intent = new Intent(Intent.ACTION_EDIT);
-//                        //Add the bundle to the intent
-//                        intent.putExtras(bundle);
-//                        start the intent
 
-//                        startActivity(editIntent);
-                    Intent intent = new Intent(Intent.ACTION_EDIT);
-                    intent.setData(ContentUris.withAppendedId(ContactsContract.Contacts.CONTENT_URI, cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.LOOKUP_KEY)));
-                    // Sets the special extended data for navigation
-                    intent.putExtra("finishActivityOnSaveCompleted", true);
-                    startActivity(intent);
 //
 //
 //
@@ -363,27 +405,31 @@ public class MainActivity extends Activity {
 //
 //            });
 
-                    listView.setFastScrollEnabled(true);
-                }
+                        listView.setFastScrollEnabled(true);
+                    }
 
 
-        });
-    }}
-//the is the arrow image, it opens the activity for edit or new contact
-    public void EditorCreateContact(View v)
-    {
+
+            });
+        }}
+
+        //the is the arrow image, it opens the activity for edit or new contact
+        public void EditorCreateContact(View v) {
 
 //                    Intent intent = new Intent(getApplicationContext(), EditorNewContact.class);
 //
 //
 //                        startActivity(intent);
-                    }
+        }
 
 
-    @Override
-    protected void onStop() {
-        super.onStop();
+        @Override
+        protected void onStop() {
+            super.onStop();
+
+        }
+
 
     }
 
-}
+
