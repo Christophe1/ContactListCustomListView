@@ -23,6 +23,8 @@ public class AddContact extends AppCompatActivity {
     EditText numberofcontact;
     public String contactname;
     public String contactnumber;
+    EditText editText;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,6 +34,7 @@ public class AddContact extends AppCompatActivity {
 
         nameofcontact = (EditText) findViewById(R.id.edittextname);
         numberofcontact = (EditText) findViewById(R.id.edittextnumber);
+        editText = (EditText) findViewById(R.id.edittextname);
 
 
     }
@@ -79,6 +82,7 @@ public class AddContact extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+
     }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -88,7 +92,6 @@ public class AddContact extends AppCompatActivity {
     //This clears the edittext next time user starts the application, rather than
 //    having the same numbers there, which the user probably doesn't want anymore
     protected void onResume() {
-        final EditText editText = (EditText) findViewById(R.id.edittextname);
         super.onResume();
         editText.setText("");
     }

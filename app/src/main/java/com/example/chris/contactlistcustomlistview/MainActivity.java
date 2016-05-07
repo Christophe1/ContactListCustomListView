@@ -61,6 +61,7 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
 //    String contactid;
 //    *****
 
+    public String cleartext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -153,6 +154,8 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
 
         @Override
         protected Void doInBackground(Void... voids) {
+
+//            selectContacts.clear();
 
             if (cursor != null) {
                 cursor.moveToFirst();
@@ -389,7 +392,9 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
 //            open the AddContact class
             case R.id.New_contact:{
                 Intent intent = new Intent(this, AddContact.class);
-                startActivity(intent);
+                startActivityForResult(intent,0);
+                setResult(RESULT_OK);
+//                finish();
 //                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //                startActivity(intent);
 //                finish(); // Call once you redirect to another activity
@@ -405,6 +410,22 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
         return false;
     }
 
+@Override
+    protected void onResume() {
+//I want to clear the searchview text when my app resumes or closes, but I keep getting an error, my app shuts down
+//    cleartext =  findViewById(R.id.searchView).toString();
+//    cleartext.isEmpty();
+//        search.setQuery("", false);
+        super.onResume();
+//    LoadContact loadContact = new LoadContact();
+//    loadContact.execute();
+    }
+
+
+    protected void onActivityResult (int requestCode, int resultCode, Intent data)
+    {
+
+    }
 
     }
 
