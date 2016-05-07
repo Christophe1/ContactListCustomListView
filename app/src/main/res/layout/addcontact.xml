@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        tools:context="com.example.chris.addnewcontact.MainActivity">
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_horizontal"
+            android:layout_alignParentTop="true"
+            android:id="@+id/linear1"
+            >
+
+            <Button
+                android:id="@+id/CancelButton"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="CANCEL"
+                android:layout_width="wrap_content" />
+
+            <Button
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
+                android:text="DONE"
+                android:id="@+id/createButton"
+                android:onClick="createButton"
+                android:layout_width="wrap_content" />
+        </LinearLayout>
+
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Populisto Contact"
+            android:id="@+id/checkBox"
+            android:layout_marginBottom="10dp"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/linear1"
+            android:checked="false"
+            android:textSize="18dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Category"
+            android:layout_marginBottom="10dp"
+            android:id="@+id/textCategory"
+            android:layout_below="@+id/checkBox"
+            android:layout_centerHorizontal="true" />
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:hint="Name"
+            android:textSize="18dp"
+            android:layout_marginBottom="10dp"
+            android:id="@+id/edittextname"
+            android:background="@drawable/back"
+            android:layout_below="@+id/textCategory"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true" />
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textSize="18dp"
+            android:background="@drawable/back"
+            android:layout_marginBottom="10dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:hint="Phone number"
+            android:inputType="phone"
+            android:id="@+id/edittextnumber"
+            android:layout_below="@+id/edittextname"
+            android:layout_alignLeft="@+id/edittextname"
+            android:layout_alignStart="@+id/edittextname" />
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textSize="18dp"
+            android:background="@drawable/back"
+            android:layout_marginBottom="10dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:hint="Address"
+            android:id="@+id/textAddress"
+            android:layout_below="@+id/edittextnumber"
+            android:layout_alignRight="@+id/edittextname"
+            android:layout_alignEnd="@+id/edittextname" />
+
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textSize="18dp"
+            android:background="@drawable/back"
+            android:layout_marginBottom="10dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:hint="Comment - service, price etc..."
+            android:id="@+id/textComment"
+            android:layout_below="@+id/textAddress"
+            android:layout_alignRight="@+id/edittextname"
+            android:layout_alignEnd="@+id/edittextname" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Who can see this?"
+            android:id="@+id/textWhocansee"
+            android:layout_below="@+id/textComment"
+            android:layout_alignLeft="@+id/checkBox"
+            android:layout_alignStart="@+id/checkBox" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="Edit"
+            android:id="@+id/textEdit"
+            android:layout_alignBottom="@+id/radioButton"
+            android:layout_toRightOf="@+id/radioButton"
+            android:layout_toEndOf="@+id/radioButton" />
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="All your contacts"
+            android:id="@+id/radioButton"
+            android:layout_below="@+id/textWhocansee"
+            android:layout_centerHorizontal="true" />
+
+
+
+        <RadioButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Public"
+            android:id="@+id/radioButton2"
+            android:layout_below="@+id/radioButton"
+
+            android:checked="false" />
+
+
+
+        <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Update"-->
+        <!--android:id="@+id/updateButton"-->
+        <!--android:layout_below="@+id/createButton"-->
+        <!--android:layout_centerHorizontal="true" />-->
+
+        <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="Delete"-->
+        <!--android:id="@+id/deleteButton"-->
+        <!--android:layout_below="@+id/updateButton"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--/>-->
+
+
+
+
+
+
+
+
+
+
+
+    </RelativeLayout>
+</ScrollView>
