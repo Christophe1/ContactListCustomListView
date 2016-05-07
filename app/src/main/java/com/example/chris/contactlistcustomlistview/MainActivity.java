@@ -116,8 +116,8 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
 //        String phoneContactId = phones.getString(phones.getColumnIndexOrThrow(BaseColumns._ID));
 //        Log.e("The number of IDs:", phoneContactId);
 
-        LoadContact loadContact = new LoadContact();
-        loadContact.execute();
+//        LoadContact loadContact = new LoadContact();
+//        loadContact.execute();
 
         search = (SearchView) findViewById(R.id.searchView);
 
@@ -245,7 +245,7 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
 
 //                }
             }
-            cursor.close();
+//            cursor.close();
             return null;
 
         }
@@ -328,7 +328,7 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
 //                    public static String dumpCursorToString(cursor);
 //                        Log.d("cursor position", String.valueOf(cursor.moveToPosition(i)));
 
-                    cursor.close();
+//                    cursor.close();
 
     /*
      * Sets the contact URI to edit, and the data type that the
@@ -392,8 +392,10 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
 //            open the AddContact class
             case R.id.New_contact:{
                 Intent intent = new Intent(this, AddContact.class);
-                startActivityForResult(intent,0);
-                setResult(RESULT_OK);
+                                startActivity(intent);
+
+//                startActivityForResult(intent,0);
+//                setResult(RESULT_OK);
 //                finish();
 //                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //                startActivity(intent);
@@ -417,15 +419,15 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
 //    cleartext.isEmpty();
 //        search.setQuery("", false);
         super.onResume();
-//    LoadContact loadContact = new LoadContact();
-//    loadContact.execute();
+    LoadContact loadContact = new LoadContact();
+    loadContact.execute();
     }
 
 
-    protected void onActivityResult (int requestCode, int resultCode, Intent data)
-    {
-
-    }
+//    protected void onActivityResult (int requestCode, int resultCode, Intent data)
+//    {
+//
+//    }
 
     }
 
