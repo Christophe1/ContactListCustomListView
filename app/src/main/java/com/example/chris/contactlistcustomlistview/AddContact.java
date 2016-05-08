@@ -77,6 +77,7 @@ public class AddContact extends AppCompatActivity {
 
         Toast.makeText(this, "Contact saved",
                 Toast.LENGTH_SHORT).show();
+        finish();
     }
 
     @Override

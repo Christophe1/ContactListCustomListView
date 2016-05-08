@@ -35,31 +35,23 @@ package com.example.chris.contactlistcustomlistview;
 public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickListener {
 
 
-    // ArrayList
+    // ArrayList called selectContacts that will contain SelectContact info
     ArrayList<SelectContact> selectContacts;
-    List<SelectContact> temp;
-    // Contact List
-    ListView listView;
-    // Cursor to load contacts list
-//    Cursor phones, email;
-    Cursor pCur;
+//    List<SelectContact> temp;
 
-    // Pop up
-//    ContentResolver resolver;
+    ListView listView;
+
     SearchView search;
     SelectContactAdapter adapter;
     String phoneContactId;
     String name;
     String phoneNumber;
     CharSequence nameofcontact;
-//    String phoneNumber;
 
     //    *****18-04-2016***
     Cursor cursor;
     ListView mainListView;
     ArrayList hashMapsArrayList;
-//    String contactid;
-//    *****
 
     public String cleartext;
 
@@ -68,8 +60,9 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        //selectContacts is an empty array list that will hold our SelectContct info
         selectContacts = new ArrayList<SelectContact>();
-//        resolver = this.getContentResolver();
+
         listView = (ListView) findViewById(R.id.contacts_list);
 
 
@@ -155,8 +148,12 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
         @Override
         protected Void doInBackground(Void... voids) {
 
-//            selectContacts.clear();
+//          we want to delete the old selectContacts from the listview when the Activity loads
+//          because it may need to be updated and we want the user to see the updated listview,
+//          like if the user adds new names and numbers to their phone contacts.
+            selectContacts.clear();
 
+//          we have this here to avoid cursor errors
             if (cursor != null) {
                 cursor.moveToFirst();
 
@@ -252,14 +249,15 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
 
         @Override
         protected void onPostExecute(Void aVoid) {
+
             super.onPostExecute(aVoid);
+
 //into each inflate_listview, put a name and phone number, which are the details making
 //            our SelectContact, above. And SelectContacts is all these inflate_listviews together
 //            This is the first property of our SelectContactAdapter, a list
 //            The next part, MainActivity.this, is our context, which is where we want the list to appear
             adapter = new SelectContactAdapter(selectContacts, MainActivity.this);
             listView.setAdapter(adapter);
-
 
             // Select item on listclick
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -350,7 +348,14 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
 //            });
 
                         listView.setFastScrollEnabled(true);
-                    }
+//                    we need to notify the listview that changes may have been made on
+//                    the background thread, doInBackground, like adding or deleting contacts,
+//                    and these changes need to be reflected visibly in the listview. It works
+//                    in conjunction with selectContacts.clear()
+                    adapter.notifyDataSetChanged();
+
+
+                }
 
 
 
@@ -419,8 +424,10 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
 //    cleartext.isEmpty();
 //        search.setQuery("", false);
         super.onResume();
+//    load the contacts again, refresh them, when the user resumes the activity
     LoadContact loadContact = new LoadContact();
     loadContact.execute();
+//    cursor.close();
     }
 
 

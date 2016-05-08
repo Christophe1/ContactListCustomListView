@@ -26,10 +26,16 @@ package com.example.chris.contactlistcustomlistview;
 
 public class SelectContactAdapter extends BaseAdapter {
 
+    //define a list made out of SelectContacts and call it _data
     public List<SelectContact> _data;
+    //define an array list made out of SelectContacts and call it arraylist
     private ArrayList<SelectContact> arraylist;
     Context _c;
+
+    //define a ViewHolder to hold our name and number info, instead of constantly querying
+    // findviewbyid. Makes the ListView run smoother
     ViewHolder v;
+
 //    RoundImage roundedImage;
 
     public SelectContactAdapter(List<SelectContact> selectContacts, Context context) {
@@ -57,11 +63,16 @@ public class SelectContactAdapter extends BaseAdapter {
     @TargetApi(Build.VERSION_CODES.LOLLIPOP)
     @Override
     public View getView(int i, View convertView, ViewGroup viewGroup) {
+
+        //we're naming our convertView as view
         View view = convertView;
+        //if there is nothing there (if it's null) inflate the layout for each row
         if (view == null) {
             LayoutInflater li = (LayoutInflater) _c.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = li.inflate(R.layout.inflate_listview, null);
 //            Log.e("Inside", "here--------------------------- In view1");
+
+            //or else use the view (what we can see in each row) that is already there
         } else {
             view = convertView;
 //            Log.e("Inside", "here--------------------------- In view2");
@@ -71,6 +82,9 @@ public class SelectContactAdapter extends BaseAdapter {
 //        number, name... the layout for this, with name, no, pic etc...
 //        is contained in inflate_listview.xml, which describes how each cell data
 //        loads into the listview
+        //Here we make a viewholder – it stores component views together so we can
+        // immediately access //them without the need to lookup repeatedly.
+        // Saves on resources, makes the listview smoother
         v = new ViewHolder();
 
 //      So, for example, title is cast to the name id, in activity main,
