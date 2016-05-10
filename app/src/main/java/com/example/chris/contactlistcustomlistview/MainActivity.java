@@ -148,6 +148,11 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
         @Override
         protected Void doInBackground(Void... voids) {
 
+//            Perhaps running this thread on the UI thread has solved the issue of the app
+//            crashing? ListView had not been updating properly, I think.
+            runOnUiThread(new Runnable() {
+                              public void run() {
+
 //          we want to delete the old selectContacts from the listview when the Activity loads
 //          because it may need to be updated and we want the user to see the updated listview,
 //          like if the user adds new names and numbers to their phone contacts.
@@ -242,6 +247,7 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
 
 //                }
             }
+                              }});
 //            cursor.close();
             return null;
 
@@ -257,6 +263,9 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
 //            This is the first property of our SelectContactAdapter, a list
 //            The next part, MainActivity.this, is our context, which is where we want the list to appear
             adapter = new SelectContactAdapter(selectContacts, MainActivity.this);
+
+//            adapter.notifyDataSetChanged();
+
             listView.setAdapter(adapter);
 
             // Select item on listclick
@@ -352,7 +361,8 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
 //                    the background thread, doInBackground, like adding or deleting contacts,
 //                    and these changes need to be reflected visibly in the listview. It works
 //                    in conjunction with selectContacts.clear()
-                    adapter.notifyDataSetChanged();
+
+//                    adapter.notifyDataSetChanged();
 
 
                 }
