@@ -9,8 +9,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.CompoundButton.OnCheckedChangeListener;
 
 import java.util.ArrayList;
 
@@ -24,7 +30,10 @@ public class AddContact extends AppCompatActivity {
     public String contactname;
     public String contactnumber;
     EditText editText;
-
+    CheckBox checkBox;
+    TextView textcategory;
+    Animation fadeInAnimation;
+    Animation fadeOutAnimation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +45,62 @@ public class AddContact extends AppCompatActivity {
         numberofcontact = (EditText) findViewById(R.id.edittextnumber);
         editText = (EditText) findViewById(R.id.edittextname);
 
+        textcategory = (TextView) findViewById(R.id.textCategory);
+        textcategory.setVisibility(View.INVISIBLE);
+
+        fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fadein);
+        fadeOutAnimation = AnimationUtils.loadAnimation(this, R.anim.fadeout);
+
+//      lets be able to manipuate the 'Populisto Contact' checkbox,
+//        make other things visible or not when checked
+         checkBox = (CheckBox) findViewById( R.id.checkBox );
+
+        checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                // TODO Auto-generated method stub
+
+                        if (isChecked) {
+//            numberofcontact.setText("This checkbox is: checked");
+                            // Now Set your animation
+                   textcategory.startAnimation(fadeInAnimation);
+
+                        }
+        else {
+//            numberofcontact.setText("This checkbox is: unchecked");
+                            // Now Set your animation
+                   textcategory.startAnimation(fadeOutAnimation);
+        }
+
+            }
+        });
 
     }
+
+//    public void onCheckedChanged(CompoundButton buttonView,
+//                                 boolean isChecked) {
+//        if (isChecked) {
+//            numberofcontact.setText("This checkbox is: checked");
+//        }
+//        else {
+//            numberofcontact.setText("This checkbox is: unchecked");
+//        }}
+
+
+
+//    CheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//
+//        @Override
+//        public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+//
+//        }
+//    }
+//    );
+
+
+
+
 
     public void createButton(View view) {
         contactname = nameofcontact.getText().toString();

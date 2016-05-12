@@ -37,13 +37,11 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
 
     // ArrayList called selectContacts that will contain SelectContact info
     ArrayList<SelectContact> selectContacts;
-//    List<SelectContact> temp;
 
     ListView listView;
 
     SearchView search;
     SelectContactAdapter adapter;
-    String phoneContactId;
     String name;
     String phoneNumber;
     CharSequence nameofcontact;
@@ -64,53 +62,6 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
         selectContacts = new ArrayList<SelectContact>();
 
         listView = (ListView) findViewById(R.id.contacts_list);
-
-
-//        this is the original phone cursor, which counts 196 (has duplicates)
-//        from https://trinitytuts.com/get-contact-list-and-show-in-custom-listview-android/
-//        phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " ASC");
-
-//        if (phones != null) {
-//            phones.moveToFirst();
-//        }
-//
-//// this query only return contacts with phone number and is not duplicated
-//        phones = getContentResolver().query(
-////                the table to query
-//                ContactsContract.Contacts.CONTENT_URI,
-////                the columns to return
-//                null,
-////               selection criteria :
-//// we only want contacts that have a name and a phone number. If they have a phone number, the value is 1 (if not, it is 0)
-//                ContactsContract.Contacts.IN_VISIBLE_GROUP + " = '" + ("1") + "'" + " AND " + ContactsContract.Contacts.HAS_PHONE_NUMBER + "=1",
-////               selection criteria
-//                null,
-////                display in ascending order
-//                ContactsContract.Contacts.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
-//
-//        Log.e("phonesblahh", "" + phones.getCount());
-//
-//        if (phones != null) {
-//            phones.moveToFirst();
-//        }
-//        String phoneContactId = phones.getString(phones.getColumnIndexOrThrow(BaseColumns._ID));
-//
-//        if (pCur != null) {
-//            pCur.moveToFirst();
-//        }
-////        pCur.moveToFirst();
-//        pCur = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
-//                ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = ?", new String[]{phoneContactId}, null);
-//        Log.e("pCurcount", "" + pCur.getCount());
-
-
-//            Remember to move the cursor to the first row, whenever dealing with cursors
-//            phones.moveToFirst();
-//        String phoneContactId = phones.getString(phones.getColumnIndexOrThrow(BaseColumns._ID));
-//        Log.e("The number of IDs:", phoneContactId);
-
-//        LoadContact loadContact = new LoadContact();
-//        loadContact.execute();
 
         search = (SearchView) findViewById(R.id.searchView);
 
@@ -440,11 +391,6 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
 //    cursor.close();
     }
 
-
-//    protected void onActivityResult (int requestCode, int resultCode, Intent data)
-//    {
-//
-//    }
 
     }
 
