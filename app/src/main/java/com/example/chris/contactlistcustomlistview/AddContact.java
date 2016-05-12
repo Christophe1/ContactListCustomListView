@@ -25,13 +25,15 @@ import java.util.ArrayList;
  */
 public class AddContact extends AppCompatActivity {
 
+    CheckBox checkBox;
+    TextView textcategory;
     EditText nameofcontact;
     EditText numberofcontact;
+    EditText textAddress;
+    EditText textComment;
     public String contactname;
     public String contactnumber;
     EditText editText;
-    CheckBox checkBox;
-    TextView textcategory;
     Animation fadeInAnimation;
     Animation fadeOutAnimation;
 
@@ -40,13 +42,18 @@ public class AddContact extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.addcontact);
 
-
+        textcategory = (EditText) findViewById(R.id.textCategory);
+        textcategory.setVisibility(View.INVISIBLE);
         nameofcontact = (EditText) findViewById(R.id.edittextname);
         numberofcontact = (EditText) findViewById(R.id.edittextnumber);
-        editText = (EditText) findViewById(R.id.edittextname);
+        textAddress = (EditText) findViewById(R.id.textAddress);
+        textAddress.setVisibility(View.INVISIBLE);
+        textComment = (EditText) findViewById(R.id.textComment);
+        textComment.setVisibility(View.INVISIBLE);
 
-        textcategory = (TextView) findViewById(R.id.textCategory);
-        textcategory.setVisibility(View.INVISIBLE);
+
+
+
 
         fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fadein);
         fadeOutAnimation = AnimationUtils.loadAnimation(this, R.anim.fadeout);
@@ -62,15 +69,23 @@ public class AddContact extends AppCompatActivity {
                 // TODO Auto-generated method stub
 
                         if (isChecked) {
-//            numberofcontact.setText("This checkbox is: checked");
                             // Now Set your animation
                    textcategory.startAnimation(fadeInAnimation);
+                            fadeInAnimation.setFillAfter(true);
+                   textAddress.startAnimation(fadeInAnimation);
+                            fadeInAnimation.setFillAfter(true);
+                   textComment.startAnimation(fadeInAnimation);
+                            fadeInAnimation.setFillAfter(true);
 
                         }
         else {
 //            numberofcontact.setText("This checkbox is: unchecked");
                             // Now Set your animation
                    textcategory.startAnimation(fadeOutAnimation);
+                            textAddress.startAnimation(fadeOutAnimation);
+                            textComment.startAnimation(fadeOutAnimation);
+
+
         }
 
             }
@@ -141,7 +156,7 @@ public class AddContact extends AppCompatActivity {
         Toast.makeText(this, "Contact saved",
                 Toast.LENGTH_SHORT).show();
 
-//        finish();
+        finish();
     }
 
     @Override
@@ -154,11 +169,11 @@ public class AddContact extends AppCompatActivity {
         return true;
     }
 
-    //This clears the edittext next time user starts the application, rather than
-//    having the same numbers there, which the user probably doesn't want anymore
+    //This clears the name of the contact the next time user starts the application, rather than
+//    having the same stuff there, which the user probably doesn't want anymore
     protected void onResume() {
         super.onResume();
-        editText.setText("");
+        nameofcontact.setText("");
     }
 
 

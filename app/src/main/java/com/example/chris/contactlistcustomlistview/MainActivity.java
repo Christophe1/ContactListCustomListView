@@ -231,10 +231,10 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
 ////                        cursor.moveToFirst();
 ////                                    get the cursor id of the clicked position
 //                        cursor.moveToPosition(i);
-                         nameofcontact = ((TextView)view.findViewById(R.id.name)).getText();
+//                         nameofcontact = ((TextView)view.findViewById(R.id.name)).getText();
 //                    }
                     // Creates a new Intent to edit a contact
-                        Intent intent = new Intent(Intent.ACTION_EDIT);
+//                        Intent intent = new Intent(Intent.ACTION_EDIT);
 //                        //Add the bundle to the intent
 //                        intent.putExtras(bundle);
 //                        start the intent
@@ -246,7 +246,7 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
 //                    intent.putExtra("finishActivityOnSaveCompleted", true);
 //                    intent.putExtra(ContactsContract.Intents.Insert.NAME, nameofcontact);
 
-                    startActivity(intent);
+//                    startActivity(intent);
 
 
 //******************************************
@@ -278,7 +278,7 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
 //                        Log.e("lookupkey", contactlookupkey);
 //                        String contactphonenumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
 //                        Log.e("Name", toString(nameddd));
-                    System.out.println(nameofcontact);
+//                    System.out.println(nameofcontact);
 //                        Log.e("phone", phoneNumber);
                         Log.d("index value", String.valueOf(i));
 //                    Log.v("cursor position", DatabaseUtils.dumpCursorToString(cursor.getPosition(i)));
@@ -325,7 +325,7 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
 
         //the is the arrow image, it opens the activity for edit or new contact
         public void EditorCreateContact(View v) {
-
+            System.out.println("gotcha!");
 //                    Intent intent = new Intent(getApplicationContext(), EditorNewContact.class);
 //
 //
