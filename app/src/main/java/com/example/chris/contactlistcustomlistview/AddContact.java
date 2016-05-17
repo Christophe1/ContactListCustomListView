@@ -116,8 +116,14 @@ public class AddContact extends AppCompatActivity {
 
 
 
+    public void cancelButton (View view){
+//        just finish the activity, don't save anything
+        finish();
 
-    public void createButton(View view) {
+    }
+
+
+    public void doneButton(View view) {
         contactname = nameofcontact.getText().toString();
         contactnumber = numberofcontact.getText().toString();
 
@@ -137,7 +143,7 @@ public class AddContact extends AppCompatActivity {
         contentProviderOperations.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
                 .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0).withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
                 .withValue(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME,contactname ).build());
-        //insert mobile number using Data.CONTENT_URI
+        //insert phone number using Data.CONTENT_URI
         contentProviderOperations.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
                 .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0).withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
                 .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, contactnumber).withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE).build());

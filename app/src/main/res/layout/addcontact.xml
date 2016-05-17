@@ -24,14 +24,15 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="CANCEL"
+                android:onClick="cancelButton"
                 android:layout_width="wrap_content" />
 
             <Button
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="DONE"
-                android:id="@+id/createButton"
-                android:onClick="createButton"
+                android:id="@+id/doneButton"
+                android:onClick="doneButton"
                 android:layout_width="wrap_content" />
         </LinearLayout>
 
@@ -165,7 +166,7 @@
         <!--android:layout_height="wrap_content"-->
         <!--android:text="Update"-->
         <!--android:id="@+id/updateButton"-->
-        <!--android:layout_below="@+id/createButton"-->
+        <!--android:layout_below="@+id/doneButton"-->
         <!--android:layout_centerHorizontal="true" />-->
 
         <!--<Button-->

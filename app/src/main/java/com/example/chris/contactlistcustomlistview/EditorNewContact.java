@@ -6,25 +6,56 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.util.Log;
+import android.view.View;
+import android.view.animation.Animation;
+import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.TextView;
 
 /**
  * Created by Chris on 21/04/2016.
  */
 public class EditorNewContact extends Activity {
 
+    CheckBox checkBox;
+    TextView textcategory;
+    EditText nameofcontact;
+    EditText numberofcontact;
+    EditText textAddress;
+    EditText textComment;
+    public String contactname;
+    public String contactnumber;
+    EditText editText;
+    Animation fadeInAnimation;
+    Animation fadeOutAnimation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_contact);
 
+        textcategory = (EditText) findViewById(R.id.textCategory);
+        textcategory.setVisibility(View.INVISIBLE);
+        nameofcontact = (EditText) findViewById(R.id.edittextname);
+        numberofcontact = (EditText) findViewById(R.id.edittextnumber);
+        textAddress = (EditText) findViewById(R.id.textAddress);
+        textAddress.setVisibility(View.INVISIBLE);
+        textComment = (EditText) findViewById(R.id.textComment);
+        textComment.setVisibility(View.INVISIBLE);
+
+        String s= getIntent().getStringExtra("thecontactname");
+        System.out.println("the name is" + s);
+
+        EditText edittext = (EditText) findViewById(R.id.edittextname);
+        edittext.setText(s);
         // Creates a new Intent to insert a contact
-        Intent intent = new Intent(ContactsContract.Intents.Insert.ACTION);
+//        Intent intent = new Intent(ContactsContract.Intents.Insert.ACTION);
 // Sets the MIME type to match the Contacts Provider
-        intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
+//        intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
 
          /* Sends the Intent
      */
-        startActivity(intent);
+//        startActivity(intent);
 //        //Get the bundle
 //        Bundle bundle = getIntent().getExtras();
 //

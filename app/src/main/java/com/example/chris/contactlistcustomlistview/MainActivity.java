@@ -1,36 +1,37 @@
+
 package com.example.chris.contactlistcustomlistview;
 
-        import android.app.Activity;
-        import android.content.ContentResolver;
-        import android.content.ContentUris;
-        import android.content.Intent;
-        import android.database.Cursor;
-        import android.database.DatabaseUtils;
-        import android.graphics.Bitmap;
-        import android.net.Uri;
-        import android.os.AsyncTask;
-        import android.os.Bundle;
-        import android.provider.BaseColumns;
-        import android.provider.ContactsContract;
-        import android.provider.MediaStore;
-        import android.util.Log;
-        import android.view.MenuInflater;
-        import android.view.MenuItem;
-        import android.view.View;
-        import android.widget.AdapterView;
-        import android.widget.ImageView;
-        import android.widget.ListView;
-        import android.widget.PopupMenu;
-        import android.widget.SearchView;
-        import android.widget.TextView;
-        import android.widget.Toast;
+import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.ContentUris;
+import android.content.Intent;
+import android.database.Cursor;
+import android.database.DatabaseUtils;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Bundle;
+import android.provider.BaseColumns;
+import android.provider.ContactsContract;
+import android.provider.MediaStore;
+import android.util.Log;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.PopupMenu;
+import android.widget.SearchView;
+import android.widget.TextView;
+import android.widget.Toast;
 
-        import java.io.IOException;
-        import java.util.ArrayList;
-        import java.util.HashMap;
-        import java.util.HashSet;
-        import java.util.List;
-        import java.util.Set;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickListener {
 
@@ -44,14 +45,16 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
     SelectContactAdapter adapter;
     String name;
     String phoneNumber;
+    String lookupkey;
     CharSequence nameofcontact;
 
     //    *****18-04-2016***
     Cursor cursor;
-    ListView mainListView;
-    ArrayList hashMapsArrayList;
+//    ListView mainListView;
+//    ArrayList hashMapsArrayList;
 
     public String cleartext;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,103 +105,116 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
 //            Perhaps running this thread on the UI thread has solved the issue of the app
 //            crashing? ListView had not been updating properly, I think.
             runOnUiThread(new Runnable() {
-                              public void run() {
+                public void run() {
 
 //          we want to delete the old selectContacts from the listview when the Activity loads
 //          because it may need to be updated and we want the user to see the updated listview,
 //          like if the user adds new names and numbers to their phone contacts.
-            selectContacts.clear();
+                    selectContacts.clear();
 
 //          we have this here to avoid cursor errors
-            if (cursor != null) {
-                cursor.moveToFirst();
+                    if (cursor != null) {
+                        cursor.moveToFirst();
 
-            }
-            try {
+                    }
+                    try {
 
 //                get a handle on the Content Resolver, so we can query the provider,
-                cursor = getApplicationContext().getContentResolver()
+                        cursor = getApplicationContext().getContentResolver()
 //                the table to query
-                        .query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
+                                .query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI,
 //               Null. This means that we are not making any conditional query into the contacts table.
 //               Hence, all data is returned into the cursor.
 //                                Projection - the columns you want to query
-                                null,
+                                        null,
 //                                Selection - with this you are extracting records with assigned (by you) conditions and rules
-                                null,
+                                        null,
 //                                SelectionArgs - This replaces any question marks (?) in the selection string
 //                               if you have something like String[] args = { "first string", "second@string.com" };
-                                null,
+                                        null,
 //                                display in ascending order
-                                ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
+                                        ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME + " COLLATE LOCALIZED ASC");
 
 //                get the column number of the Contact_ID column, make it an integer.
 //                I think having it stored as a number makes for faster operations later on.
-                int Idx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID);
+                        int Idx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.CONTACT_ID);
 //                get the column number of the DISPLAY_NAME column
-                int nameIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
+                        int nameIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME);
 //                 get the column number of the NUMBER column
-                int phoneNumberIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+                        int phoneNumberIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER);
+
+//                ****
+                        int contactlookupkey = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.LOOKUP_KEY);
+//                ****
+//                cursor.moveToFirst();
+//        String contactlookupkey2 = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.LOOKUP_KEY));
+
 
 //                int photoIdIdx = cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI);
 
 
-                cursor.moveToFirst();
+                        cursor.moveToFirst();
 
 //              We make a new Hashset to hold all our contact_ids, including duplicates, if they come up
-                Set<String> ids = new HashSet<>();
-                do {
-                    System.out.println("=====>in while");
+                        Set<String> ids = new HashSet<>();
+                        do {
+                            System.out.println("=====>in while");
 //                  get a handle on the contactid, which is a string. Loop through all the contact_ids
-                    String contactid = cursor.getString(Idx);
+                            String contactid = cursor.getString(Idx);
 //                  if our Hashset doesn't already contain the contactid string,
 //                    then add it to the hashset
-                    if (!ids.contains(contactid)) {
-                        ids.add(contactid);
+                            if (!ids.contains(contactid)) {
+                                ids.add(contactid);
 
-                        HashMap<String, String> hashMap = new HashMap<String, String>();
+                                HashMap<String, String> hashMap = new HashMap<String, String>();
 //                        get a handle on the display name, which is a string
-                        name = cursor.getString(nameIdx);
+                                name = cursor.getString(nameIdx);
 //                        get a handle on the phone number, which is a string
-                         phoneNumber = cursor.getString(phoneNumberIdx);
+                                phoneNumber = cursor.getString(phoneNumberIdx);
 //                        String image = cursor.getString(photoIdIdx);
+
+                                lookupkey = cursor.getString(contactlookupkey);
+
 //                    System.out.println("Id--->"+contactid+"Name--->"+name);
-                        System.out.println("Id--->" + contactid + " Name--->" + name);
-                        System.out.println("Id--->" + contactid + " Number--->" + phoneNumber);
+                                System.out.println("Id--->" + contactid + " Name--->" + name);
+                                System.out.println("Id--->" + contactid + " Number--->" + phoneNumber);
+                                System.out.println("Id--->" + contactid + " lookupkey--->" + lookupkey);
+
+//                        System.out.println("Id--->" + contactid + " lookupkey2--->" + contactlookupkey2);
 
 //                        if (!phoneNumber.contains("*")) {
 //                            hashMap.put("contactid", "" + contactid);
 //                            hashMap.put("name", "" + name);
 //                            hashMap.put("phoneNumber", "" + phoneNumber);
 //                            hashMap.put("image", "" + image);
-                            // hashMap.put("email", ""+email);
+                                // hashMap.put("email", ""+email);
 //                            if (hashMapsArrayList != null) {
 //                                hashMapsArrayList.add(hashMap);
 //                            }
 //                    hashMapsArrayList.add(hashMap);
 //                        }
 
-                        SelectContact selectContact = new SelectContact();
+                                SelectContact selectContact = new SelectContact();
 //                    selectContact.setThumb(bit_thumb);
-                        selectContact.setName(name);
-                        selectContact.setPhone(phoneNumber);
+                                selectContact.setName(name);
+                                selectContact.setPhone(phoneNumber);
 //                    selectContact.setEmail(id);
 //                    selectContact.setCheckedBox(false);
-                        selectContacts.add(selectContact);
-                    }
+                                selectContacts.add(selectContact);
+                            }
 
 
-                } while (cursor.moveToNext());
+                        } while (cursor.moveToNext());
 
 
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    } finally {
 //                if (cursor != null) {
 
 //                }
-            }
-                              }});
+                    }
+                }});
 //            cursor.close();
             return null;
 
@@ -258,11 +274,11 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
 //
 //                        Intent intent = new Intent(getApplicationContext(), EditorNewContact.class);
 //
-                        //Create the bundle
+                    //Create the bundle
 //                        Bundle bundle = new Bundle();
 //
 //                    }
-                        //Add your data to bundle
+                    //Add your data to bundle
 //                        bundle.putString("lookup_key", contactlookupkey);
 //                      ****************************************8
 
@@ -273,14 +289,14 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
      */
 
 
-                        // Creates a new Intent to edit a contact
+                    // Creates a new Intent to edit a contact
 //                    Intent editIntent = new Intent(Intent.ACTION_EDIT);
 //                        Log.e("lookupkey", contactlookupkey);
 //                        String contactphonenumber = cursor.getString(cursor.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
 //                        Log.e("Name", toString(nameddd));
 //                    System.out.println(nameofcontact);
 //                        Log.e("phone", phoneNumber);
-                        Log.d("index value", String.valueOf(i));
+                    Log.d("index value", String.valueOf(i));
 //                    Log.v("cursor position", DatabaseUtils.dumpCursorToString(cursor.getPosition(i)));
 //                    DatabaseUtils.dumpCursorToString(cursor);
 //                    public static String dumpCursorToString(cursor);
@@ -307,7 +323,7 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
 //
 //            });
 
-                        listView.setFastScrollEnabled(true);
+                    listView.setFastScrollEnabled(true);
 //                    we need to notify the listview that changes may have been made on
 //                    the background thread, doInBackground, like adding or deleting contacts,
 //                    and these changes need to be reflected visibly in the listview. It works
@@ -323,21 +339,27 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
             });
         }}
 
-        //the is the arrow image, it opens the activity for edit or new contact
-        public void EditorCreateContact(View v) {
-            System.out.println("gotcha!");
-//                    Intent intent = new Intent(getApplicationContext(), EditorNewContact.class);
+    //the is the arrow image, it opens the activity for show and edit
+    public void DisplayorEditContact(View v) {
+        System.out.println("works so far");
+        System.out.println(v.getTag().toString());
+//        thecontactname is the name of the person in that corresponding cell.
+        Intent intent = new Intent(getApplicationContext(), EditorNewContact.class).putExtra("thecontactname",v.getTag().toString());
+        startActivity(intent);
+    }
+
+//    Intent myintent=new Intent(Info.this, GraphDiag.class).putExtra("<StringName>", value);
+//    startActivity(myintent);
+//    use the below code in child activity
 //
-//
-//                        startActivity(intent);
-        }
+//    String s= getIntent().getStringExtra(<StringName>);
 
 
-        @Override
-        protected void onStop() {
-            super.onStop();
+    @Override
+    protected void onStop() {
+        super.onStop();
 
-        }
+    }
 
     //    this is for the settings menu
     public void settingsPopUp(View view) {
@@ -358,7 +380,7 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
 //            open the AddContact class
             case R.id.New_contact:{
                 Intent intent = new Intent(this, AddContact.class);
-                                startActivity(intent);
+                startActivity(intent);
 
 //                startActivityForResult(intent,0);
 //                setResult(RESULT_OK);
@@ -378,7 +400,7 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
         return false;
     }
 
-@Override
+    @Override
     protected void onResume() {
 //I want to clear the searchview text when my app resumes or closes, but I keep getting an error, my app shuts down
 //    cleartext =  findViewById(R.id.searchView).toString();
@@ -386,12 +408,10 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
 //        search.setQuery("", false);
         super.onResume();
 //    load the contacts again, refresh them, when the user resumes the activity
-    LoadContact loadContact = new LoadContact();
-    loadContact.execute();
+        LoadContact loadContact = new LoadContact();
+        loadContact.execute();
 //    cursor.close();
     }
 
 
-    }
-
-
+}
