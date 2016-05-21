@@ -92,6 +92,21 @@
             android:layout_alignLeft="@+id/edittextname"
             android:layout_alignStart="@+id/edittextname" />
 
+        <EditText
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:textSize="18dp"
+            android:background="@drawable/back"
+            android:layout_marginBottom="10dp"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:hint="Look up Key"
+            android:inputType="phone"
+            android:id="@+id/edittextlookup"
+            android:layout_below="@+id/edittextnumber"
+            android:layout_alignLeft="@+id/edittextnumber"
+            android:layout_alignStart="@+id/edittextnumber" />
+
         <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

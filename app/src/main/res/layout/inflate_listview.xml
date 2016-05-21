@@ -36,6 +36,15 @@
                 android:textSize="18sp" />
 
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:id="@+id/lookup"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:text="lookup"
+                android:textSize="18sp" />
         </LinearLayout>
 
     <View

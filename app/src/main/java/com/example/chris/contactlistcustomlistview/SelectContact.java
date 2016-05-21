@@ -6,7 +6,8 @@ package com.example.chris.contactlistcustomlistview;
 import android.graphics.Bitmap;
 
 public class SelectContact {
-    String name;
+
+    Bitmap thumb;
 
     public Bitmap getThumb() {
         return thumb;
@@ -16,7 +17,7 @@ public class SelectContact {
         this.thumb = thumb;
     }
 
-    Bitmap thumb;
+    String phone;
 
     public String getPhone() {
         return phone;
@@ -26,7 +27,7 @@ public class SelectContact {
         this.phone = phone;
     }
 
-    String phone;
+    Boolean checkedBox = false;
 
     public Boolean getCheckedBox() {
         return checkedBox;
@@ -36,7 +37,7 @@ public class SelectContact {
         this.checkedBox = checkedBox;
     }
 
-    Boolean checkedBox = false;
+    String name;
 
     public String getName() {
         return name;
@@ -56,5 +57,13 @@ public class SelectContact {
         this.email = email;
     }
 
+    String lookup;
 
+    public String getLookup() {
+        return lookup;
+    }
+
+    public void setLookup(String lookup) {
+        this.lookup = lookup;
+    }
 }

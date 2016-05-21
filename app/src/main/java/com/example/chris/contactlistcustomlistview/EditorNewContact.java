@@ -21,6 +21,7 @@ public class EditorNewContact extends Activity {
     TextView textcategory;
     EditText nameofcontact;
     EditText numberofcontact;
+    EditText lookupofcontact;
     EditText textAddress;
     EditText textComment;
     public String contactname;
@@ -38,16 +39,34 @@ public class EditorNewContact extends Activity {
         textcategory.setVisibility(View.INVISIBLE);
         nameofcontact = (EditText) findViewById(R.id.edittextname);
         numberofcontact = (EditText) findViewById(R.id.edittextnumber);
+        lookupofcontact = (EditText) findViewById(R.id.edittextlookup);
+
+
         textAddress = (EditText) findViewById(R.id.textAddress);
         textAddress.setVisibility(View.INVISIBLE);
         textComment = (EditText) findViewById(R.id.textComment);
         textComment.setVisibility(View.INVISIBLE);
 
-        String s= getIntent().getStringExtra("thecontactname");
+
+        Intent intent = getIntent();
+        Bundle extras = intent.getExtras();
+//        get the string, thecontactname, from MainActivity and make it equal to s
+        String s = extras.getString("thecontactname");
+        String l = extras.getString("thelookupkey");
+
+//        String s= getIntent().getStringExtra("thecontactname");
         System.out.println("the name is" + s);
 
+//        String l= getIntent().getStringExtra("thelookupkey");
+        System.out.println("the lookup is" + l);
+
+//      set the text in the view edittext to s, which is grabbing the String thecontactname
+//      from MainActivity
         EditText edittext = (EditText) findViewById(R.id.edittextname);
         edittext.setText(s);
+
+        EditText edittext1 = (EditText) findViewById(R.id.edittextlookup);
+        edittext1.setText(l);
         // Creates a new Intent to insert a contact
 //        Intent intent = new Intent(ContactsContract.Intents.Insert.ACTION);
 // Sets the MIME type to match the Contacts Provider

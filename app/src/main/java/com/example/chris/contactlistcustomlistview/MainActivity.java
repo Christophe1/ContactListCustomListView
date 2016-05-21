@@ -198,7 +198,7 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
 //                    selectContact.setThumb(bit_thumb);
                                 selectContact.setName(name);
                                 selectContact.setPhone(phoneNumber);
-//                    selectContact.setEmail(id);
+                    selectContact.setLookup(lookupkey);
 //                    selectContact.setCheckedBox(false);
                                 selectContacts.add(selectContact);
                             }
@@ -342,10 +342,18 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
     //the is the arrow image, it opens the activity for show and edit
     public void DisplayorEditContact(View v) {
         System.out.println("works so far");
-        System.out.println(v.getTag().toString());
-//        thecontactname is the name of the person in that corresponding cell.
-        Intent intent = new Intent(getApplicationContext(), EditorNewContact.class).putExtra("thecontactname",v.getTag().toString());
+//        System.out.println(v.getTag().toString());
+
+        Intent intent = new Intent(getApplicationContext(), EditorNewContact.class);
+        Bundle extras = new Bundle();
+//        make a string thecontactname. DisplayorEditContact is our arrowright image.
+//        Everytime arrowright is clicked we tag the contact name, which is the corresponding name of the person in the cell
+//        this value is then passed onto getString, in EditorNewContaxt.java
+        extras.putString ("thecontactname",v.getTag(R.string.getthename).toString());
+        extras.putString("thelookupkey",v.getTag(R.string.getthelookup).toString());
+        intent.putExtras(extras);
         startActivity(intent);
+
     }
 
 //    Intent myintent=new Intent(Info.this, GraphDiag.class).putExtra("<StringName>", value);

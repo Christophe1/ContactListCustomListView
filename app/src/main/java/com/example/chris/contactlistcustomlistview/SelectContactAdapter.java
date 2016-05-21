@@ -43,6 +43,7 @@ public class SelectContactAdapter extends BaseAdapter {
         this.arraylist.addAll(theContactsList);
     }
 
+
     @Override
     public int getCount() {
         return theContactsList.size();
@@ -64,7 +65,7 @@ public class SelectContactAdapter extends BaseAdapter {
         //        In each cell in the listview show the items you want to have
 //        Having a ViewHolder caches our ids, instead of having to call and load each one again and again
         ImageView imageView;
-        TextView title, phone;
+        TextView title, phone, lookup;
 //        CheckBox check;
     }
 
@@ -95,7 +96,7 @@ public class SelectContactAdapter extends BaseAdapter {
 //        loads into the listview
         //Viewholder stores component views together so we can
         // immediately access them without the need to lookup repeatedly.
-        // Saves on resources, makes the listview smoother
+        // Saves on resources, makes the listview smoother. It saves on having to look up findviewbyid all the time
         v = new ViewHolder();
 
 //      So, for example, title is cast to the name id, in inflate_listview,
@@ -103,6 +104,8 @@ public class SelectContactAdapter extends BaseAdapter {
         v.title = (TextView) view.findViewById(R.id.name);
 //        v.check = (CheckBox) view.findViewById(R.id.check);
         v.phone = (TextView) view.findViewById(R.id.no);
+//        make the lookup view invisible, user doesn't need to see it
+        v.lookup = (TextView) view.findViewById(R.id.lookup);
         v.imageView = (ImageView) view.findViewById(R.id.arrowright);
 
 //        store the holder with the view
@@ -110,7 +113,12 @@ public class SelectContactAdapter extends BaseAdapter {
         v.title.setText(data.getName());
 //        v.check.setChecked(data.getCheckedBox());
         v.phone.setText(data.getPhone());
-        v.imageView.setTag(data.getName());
+        v.lookup.setText(data.getLookup());
+
+//        set a tag for a string we're calling getthename, and make it equal to the name of the contact
+        v.imageView.setTag(R.string.getthename,data.getName());
+        v.imageView.setTag(R.string.getthelookup,data.getLookup());
+
 
 
 //        Log.e("Image Thumb", "--------------" + data.getThumb());
