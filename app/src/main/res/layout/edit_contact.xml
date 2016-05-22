@@ -114,7 +114,8 @@
             android:textSize="18dp"
         android:text="Save test"
         android:id="@+id/savetestbutton"
-        android:layout_below="@+id/edittextnumber"
+        android:layout_below="@+id/edittextlookup"
+        android:onClick="savetestbutton"
         android:layout_gravity="center_horizontal" />
 
         <EditText

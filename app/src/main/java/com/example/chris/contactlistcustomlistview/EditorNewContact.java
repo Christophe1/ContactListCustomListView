@@ -1,10 +1,14 @@
 package com.example.chris.contactlistcustomlistview;
 
 import android.app.Activity;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
@@ -30,6 +34,8 @@ public class EditorNewContact extends Activity {
     Animation fadeInAnimation;
     Animation fadeOutAnimation;
 
+    String l;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +58,7 @@ public class EditorNewContact extends Activity {
         Bundle extras = intent.getExtras();
 //        get the string, thecontactname, from MainActivity and make it equal to s
         String s = extras.getString("thecontactname");
-        String l = extras.getString("thelookupkey");
+        l = extras.getString("thelookupkey");
 
 //        String s= getIntent().getStringExtra("thecontactname");
         System.out.println("the name is" + s);
@@ -67,35 +73,49 @@ public class EditorNewContact extends Activity {
 
         EditText edittext1 = (EditText) findViewById(R.id.edittextlookup);
         edittext1.setText(l);
-        // Creates a new Intent to insert a contact
-//        Intent intent = new Intent(ContactsContract.Intents.Insert.ACTION);
-// Sets the MIME type to match the Contacts Provider
-//        intent.setType(ContactsContract.RawContacts.CONTENT_TYPE);
 
-         /* Sends the Intent
-     */
-//        startActivity(intent);
-//        //Get the bundle
-//        Bundle bundle = getIntent().getExtras();
-//
-////Extract the data…
-//        String lookupkeyvalue = bundle.getString("lookup_key");
-//        Log.e("this is the lookup key:", lookupkeyvalue);
-//
-//        Intent intenttwo = new Intent(Intent.ACTION_VIEW);
-//        Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_URI, String.valueOf(lookupkeyvalue));
-//        intenttwo.setData(uri);
-//        startActivity(intenttwo);
-        //Get the bundle
-//        Bundle bundle = getIntent().getExtras();
-//
-////Extract the data…
-//        String stuff = bundle.getString("stuff");
-//        Log.e("this is stuff:", stuff);
-
-//        Intent intent = new Intent(Intent.ACTION_INSERT_OR_EDIT);
-//        intent.setType(ContactsContract.Contacts.CONTENT_ITEM_TYPE);
-//        intent.putExtra(ContactsContract.Intents.Insert.EMAIL, "example@example.com");
-//        startActivity(intent);
     }
-}
+
+    public void deleteButton(View view) {
+        System.out.println("delete works");
+        String thelookupkey;
+        thelookupkey = "1885r1463-4B373D3D372F2D4333";
+
+//      in our cursor query let's focus on the LOOKUP_KEY column
+//      this will give us all the strings in that column
+        String [] PROJECTION = new String [] {  ContactsContract.Contacts.LOOKUP_KEY };
+
+//      we're going to query all the LOOKUP_KEY strings ; that is, the unique ids of all our contacts
+//      which we can find in the LOOKUP_KEY column of the CONTENT_URI table
+        Cursor cur = getContentResolver().query
+                (ContactsContract.Contacts.CONTENT_URI, PROJECTION, null, null, null);
+
+        try {
+            if (cur.moveToFirst()) {
+                do {
+                    if
+//               If a LOOKUP_KEY value is equal to our look up key string..
+                 (cur.getString(cur.getColumnIndex(ContactsContract.Contacts.LOOKUP_KEY)).equalsIgnoreCase(thelookupkey)) {
+//               then delete that LOOKUP_KEY value, including all associated details, like number, name etc...
+                        Uri uri = Uri.withAppendedPath(ContactsContract.Contacts.CONTENT_LOOKUP_URI, thelookupkey);
+                        getContentResolver().delete(uri, null, null);
+                    }
+
+                } while (cur.moveToNext());
+            }
+//      deal with any errors, should they arise
+        } catch (Exception e) {
+            System.out.println(e.getStackTrace());
+        } finally {
+//            finally, close the cursor
+            cur.close();
+        }
+
+    }
+
+
+    }
+
+
+
+
