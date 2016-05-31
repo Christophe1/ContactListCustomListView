@@ -117,6 +117,8 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
                         cursor.moveToFirst();
 
                     }
+
+
                     try {
 
 //                get a handle on the Content Resolver, so we can query the provider,
@@ -209,9 +211,10 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
 
                     } catch (Exception e) {
                         e.printStackTrace();
+                        cursor.close();
                     } finally {
 //                if (cursor != null) {
-
+//                        cursor.close();
 //                }
                     }
                 }});
@@ -350,6 +353,7 @@ public class MainActivity extends Activity implements PopupMenu.OnMenuItemClickL
 //        Everytime arrowright is clicked we tag the contact name, which is the corresponding name of the person in the cell
 //        this value is then passed onto getString, in EditorNewContaxt.java
         extras.putString ("thecontactname",v.getTag(R.string.getthename).toString());
+        extras.putString ("thecontactnumber",v.getTag(R.string.getthenumber).toString());
         extras.putString("thelookupkey",v.getTag(R.string.getthelookup).toString());
         intent.putExtras(extras);
         startActivity(intent);

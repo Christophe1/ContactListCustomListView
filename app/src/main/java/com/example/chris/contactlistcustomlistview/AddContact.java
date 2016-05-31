@@ -31,8 +31,15 @@ public class AddContact extends AppCompatActivity {
     EditText numberofcontact;
     EditText textAddress;
     EditText textComment;
-    public String contactname;
-    public String contactnumber;
+
+//    these are the string values of the EditTexts, above
+    String category;
+    String contactname;
+    String contactnumber;
+    String contactaddress;
+    String comment;
+    Integer whocansee;
+
     EditText editText;
     Animation fadeInAnimation;
     Animation fadeOutAnimation;
@@ -42,6 +49,7 @@ public class AddContact extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.addcontact);
 
+//      initialise the edittexts
         textcategory = (EditText) findViewById(R.id.textCategory);
         textcategory.setVisibility(View.INVISIBLE);
         nameofcontact = (EditText) findViewById(R.id.edittextname);
@@ -50,10 +58,6 @@ public class AddContact extends AppCompatActivity {
         textAddress.setVisibility(View.INVISIBLE);
         textComment = (EditText) findViewById(R.id.textComment);
         textComment.setVisibility(View.INVISIBLE);
-
-
-
-
 
         fadeInAnimation = AnimationUtils.loadAnimation(this, R.anim.fadein);
         fadeOutAnimation = AnimationUtils.loadAnimation(this, R.anim.fadeout);
@@ -124,9 +128,24 @@ public class AddContact extends AppCompatActivity {
 
 
     public void doneButton(View view) {
+
+//      save the details the user types in
         contactname = nameofcontact.getText().toString();
         contactnumber = numberofcontact.getText().toString();
 
+//        If Populisto checkbox is ticked...
+        if (checkBox.isChecked()) {
+//            set string values for the Populisto edittexts, radio buttons...
+            category = textcategory.getText().toString();
+            contactaddress = textAddress.getText().toString();
+            comment = textComment.getText().toString();
+//            Integer whocansee;
+System.out.println("checked");
+        }
+
+
+else {
+            System.out.println("not checked");
         if (contactname.length() == 0) {
 
             Toast.makeText(this, "Please enter a name",
@@ -134,6 +153,7 @@ public class AddContact extends AppCompatActivity {
             return;
         }
 
+//        save the contact name and number in the user's phone
         ArrayList<ContentProviderOperation> contentProviderOperations = new ArrayList<ContentProviderOperation>();
         //insert raw contact using RawContacts.CONTENT_URI
         contentProviderOperations.add(ContentProviderOperation.newInsert(ContactsContract.RawContacts.CONTENT_URI)
@@ -163,6 +183,7 @@ public class AddContact extends AppCompatActivity {
                 Toast.LENGTH_SHORT).show();
 
         finish();
+    }
     }
 
     @Override

@@ -117,6 +117,7 @@ public class SelectContactAdapter extends BaseAdapter {
 
 //        set a tag for a string we're calling getthename, and make it equal to the name of the contact
         v.imageView.setTag(R.string.getthename,data.getName());
+        v.imageView.setTag(R.string.getthenumber,data.getPhone());
         v.imageView.setTag(R.string.getthelookup,data.getLookup());
 
 
