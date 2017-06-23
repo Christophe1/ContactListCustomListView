@@ -26,13 +26,13 @@ import java.util.ArrayList;
 public class AddContact extends AppCompatActivity {
 
     CheckBox checkBox;
-    TextView textcategory;
+    EditText textcategory;
     EditText nameofcontact;
     EditText numberofcontact;
     EditText textAddress;
     EditText textComment;
 
-//    these are the string values of the EditTexts, above
+    //    these are the string values of the EditTexts, above
     String category;
     String contactname;
     String contactnumber;
@@ -64,7 +64,7 @@ public class AddContact extends AppCompatActivity {
 
 //      lets be able to manipuate the 'Populisto Contact' checkbox,
 //        make other things visible or not when checked
-         checkBox = (CheckBox) findViewById( R.id.checkBox );
+        checkBox = (CheckBox) findViewById(R.id.checkBox);
 
         checkBox.setOnCheckedChangeListener(new OnCheckedChangeListener() {
 
@@ -72,25 +72,31 @@ public class AddContact extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 // TODO Auto-generated method stub
 
-                        if (isChecked) {
-                            // Now Set your animation
-                   textcategory.startAnimation(fadeInAnimation);
-                            fadeInAnimation.setFillAfter(true);
-                   textAddress.startAnimation(fadeInAnimation);
-                            fadeInAnimation.setFillAfter(true);
-                   textComment.startAnimation(fadeInAnimation);
-                            fadeInAnimation.setFillAfter(true);
+                if (isChecked) {
+                    // Now Set your animation
+                    textcategory.startAnimation(fadeInAnimation);
+                    fadeInAnimation.setFillAfter(true);
+//                    need to set the visibility
+                    textcategory.setVisibility(View.VISIBLE);
+                    textAddress.startAnimation(fadeInAnimation);
+                    fadeInAnimation.setFillAfter(true);
+                    textAddress.setVisibility(View.VISIBLE);
+                    textComment.startAnimation(fadeInAnimation);
+                    fadeInAnimation.setFillAfter(true);
+                    textComment.setVisibility(View.VISIBLE);
 
-                        }
-        else {
+                } else {
 //            numberofcontact.setText("This checkbox is: unchecked");
-                            // Now Set your animation
-                   textcategory.startAnimation(fadeOutAnimation);
-                            textAddress.startAnimation(fadeOutAnimation);
-                            textComment.startAnimation(fadeOutAnimation);
+                    // Now Set your animation
+                    textcategory.startAnimation(fadeOutAnimation);
+//                    set the view to invisible
+                    textcategory.setVisibility(View.INVISIBLE);
+                    textAddress.startAnimation(fadeOutAnimation);
+                    textAddress.setVisibility(View.INVISIBLE);
+                    textComment.startAnimation(fadeOutAnimation);
+                    textComment.setVisibility(View.INVISIBLE);
 
-
-        }
+                }
 
             }
         });
@@ -107,7 +113,6 @@ public class AddContact extends AppCompatActivity {
 //        }}
 
 
-
 //    CheckBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 //
 //        @Override
@@ -118,9 +123,7 @@ public class AddContact extends AppCompatActivity {
 //    );
 
 
-
-
-    public void cancelButton (View view){
+    public void cancelButton(View view) {
 //        just finish the activity, don't save anything
         finish();
 
@@ -140,57 +143,68 @@ public class AddContact extends AppCompatActivity {
             contactaddress = textAddress.getText().toString();
             comment = textComment.getText().toString();
 //            Integer whocansee;
-System.out.println("checked");
-        }
 
 
-else {
+            String method = "addcontact";
+//            we want this class to be able to recognise the AddBackgroundTask object and its
+//            AsyncTask functionality, so we can use calls to the database in the background
+//            (in this case adding a new contact's details) so we instantiate it and use its context
+            AddContactBackgroundTask addContactBackgroundTask = new AddContactBackgroundTask(this);
+//            now we can use its methods, in this case the doInBackground
+            addContactBackgroundTask.execute(method, contactname, contactnumber, category, contactaddress, comment);
+            finish();
+
+            System.out.println("checked");
+        } else
+
+        {
             System.out.println("not checked");
-        if (contactname.length() == 0) {
+            if (contactname.length() == 0) {
+                Toast.makeText(this, "Please enter a name",
+                        Toast.LENGTH_LONG).show();
+                return;
+            }
 
-            Toast.makeText(this, "Please enter a name",
-                    Toast.LENGTH_LONG).show();
-            return;
-        }
-
-//        save the contact name and number in the user's phone
-        ArrayList<ContentProviderOperation> contentProviderOperations = new ArrayList<ContentProviderOperation>();
-        //insert raw contact using RawContacts.CONTENT_URI
-        contentProviderOperations.add(ContentProviderOperation.newInsert(ContactsContract.RawContacts.CONTENT_URI)
-                .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null).withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null).build());
-        //insert contact display name using Data.CONTENT_URI
-        Log.d("ffff","wwww");
-        contentProviderOperations.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
-                .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0).withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
-                .withValue(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME,contactname ).build());
-        //insert phone number using Data.CONTENT_URI
-        contentProviderOperations.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
-                .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0).withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
-                .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, contactnumber).withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE).build());
-        try {
-            //apply the changes
-            getApplicationContext().getContentResolver().
-                    applyBatch(ContactsContract.AUTHORITY, contentProviderOperations);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        } catch (OperationApplicationException e) {
-            e.printStackTrace();
-        }
+            //        save the contact name and number in the user's phone
+            ArrayList<ContentProviderOperation> contentProviderOperations = new ArrayList<ContentProviderOperation>();
+            //insert raw contact using RawContacts.CONTENT_URI
+            contentProviderOperations.add(ContentProviderOperation.newInsert(ContactsContract.RawContacts.CONTENT_URI)
+                    .withValue(ContactsContract.RawContacts.ACCOUNT_TYPE, null).withValue(ContactsContract.RawContacts.ACCOUNT_NAME, null).build());
+            //insert contact display name using Data.CONTENT_URI
+            Log.d("ffff", "wwww");
+            contentProviderOperations.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0).withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.StructuredName.CONTENT_ITEM_TYPE)
+                    .withValue(ContactsContract.CommonDataKinds.StructuredName.DISPLAY_NAME, contactname).build());
+            //insert phone number using Data.CONTENT_URI
+            contentProviderOperations.add(ContentProviderOperation.newInsert(ContactsContract.Data.CONTENT_URI)
+                    .withValueBackReference(ContactsContract.Data.RAW_CONTACT_ID, 0).withValue(ContactsContract.Data.MIMETYPE, ContactsContract.CommonDataKinds.Phone.CONTENT_ITEM_TYPE)
+                    .withValue(ContactsContract.CommonDataKinds.Phone.NUMBER, contactnumber).withValue(ContactsContract.CommonDataKinds.Phone.TYPE, ContactsContract.CommonDataKinds.Phone.TYPE_MOBILE).build());
+            try {
+                //apply the changes
+                getApplicationContext().getContentResolver().
+                        applyBatch(ContactsContract.AUTHORITY, contentProviderOperations);
+            } catch (RemoteException e) {
+                e.printStackTrace();
+            } catch (OperationApplicationException e) {
+                e.printStackTrace();
+            }
 
 //        SelectContactAdapter.changeCursor(cursor);
 
-        Toast.makeText(this, "Contact saved",
-                Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "Contact saved",
+                    Toast.LENGTH_SHORT).show();
 
-        finish();
+            finish();
+        }
     }
-    }
+
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
 
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         return true;
@@ -203,5 +217,5 @@ else {
         nameofcontact.setText("");
     }
 
-
 }
+
