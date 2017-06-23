@@ -52,15 +52,22 @@
         android:orientation="horizontal">
         <!--android:gravity="bottom">-->
 
-        <CheckBox
-            android:layout_height="match_parent"
+        <Button
             android:layout_width="0dp"
-            android:background="#ffa500"
-            android:text="New CheckBox"
-            android:id="@+id/checkBox"
+            android:layout_height="match_parent"
             android:layout_weight="1"
-            />
+            android:text="SAVE"
+            android:id="@+id/save"
 
+            />
+        <Button
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="CANCEL"
+            android:id="@+id/cancel"
+
+            />
 
     </LinearLayout>
 
